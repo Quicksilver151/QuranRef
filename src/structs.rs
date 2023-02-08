@@ -17,7 +17,7 @@ pub struct VerseIndex {
 }
 impl VerseIndex {
     pub fn new() -> VerseIndex {
-        VerseIndex { chapter: 1, verse: 1 }
+        VerseIndex { chapter: 0, verse: 0 }
     }
 }
 

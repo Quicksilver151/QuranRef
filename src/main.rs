@@ -39,5 +39,5 @@ fn main() {
     
     dbg!(flag);
     
-    println!("{}",HELP_TEXT);
+    // println!("{}",HELP_TEXT);
 }
