@@ -18,7 +18,7 @@ fn main() {
     handle_ctrlc();
     
     // load config
-    let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-en", None);
+    let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
     let cfg =
         match cfg_result {
             Ok (cfg_result) => cfg_result,
@@ -28,7 +28,7 @@ fn main() {
             }
         };
     
-    confy::store("quran_ref", None, cfg).unwrap_or_default();
+    confy::store("quran-ref", None, cfg).unwrap_or_default();
     
     // fetch flags
     let args: Vec<String> = env::args().collect();
@@ -37,7 +37,21 @@ fn main() {
         Err(_flag) => return,
     };
     
+    if flag.help {
+        println!("{}",HELP_TEXT);
+        return;
+    }
+    if flag.edit {
+        todo!("edit function");
+    } 
+    if flag.index.chapter == 0 {
+        println!("{}",HELP_TEXT);
+        return;
+    }
+    if flag.arabic {
+        todo!("display verses in arabic");
+    }
+       
     dbg!(flag);
     
-    // println!("{}",HELP_TEXT);
 }

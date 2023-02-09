@@ -2,7 +2,7 @@ use crate::*;
 
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Config {
-    pub translations: Vec<u32>,
+    pub translations: Vec<u8>,
 }
 impl Config {
     pub fn new() -> Config {

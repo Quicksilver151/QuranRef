@@ -29,12 +29,12 @@ pub const HELP_TEXT : &str =
 "quran-ref
 Display the verses of the quran in various english translations using references
 
-Usage: quran-ref [OPTIONS] <START_CHAPTER:START_VERSE> optional(<END_CHAPTER:END_VERSE>)
+Usage: quran-ref [OPTIONS] <START_CHAPTER:START_VERSE> <END_CHAPTER:END_VERSE>
 
 eg: 
 > quran-ref 21:12
 > quran-ref 12:3 12:8
-> quran-ref 3:23 4:10
+> quran-ref -a 3:23 4:10
 
 OPTIONS:
     -h, --help          shows this help section
