@@ -34,9 +34,12 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let flag: Flag = match flag_parser::parse_args(args) {
         Ok(flag) => flag,
-        Err(_flag) => return,
+        Err(_flag) => {println!("{}",HELP_TEXT); return;},
     };
     
+    dbg!(&flag);
+    
+    // branch flags
     if flag.help {
         println!("{}",HELP_TEXT);
         return;
@@ -52,6 +55,5 @@ fn main() {
         todo!("display verses in arabic");
     }
        
-    dbg!(flag);
     
 }

@@ -88,31 +88,40 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
                 }
             }
         }
+        else if !arg.contains(':') {
+            println!("Invalid verse format. ':' required");
+            return Err(FlagErr);
+        }
         else if flag.index.chapter == 0 {
             let splits : Vec<&str> = arg.split(':').collect();
+            
             let (chapter_index, verse_index) = (splits[0],splits[1]);
             
-            match chapter_index.parse::<u16>(){
-                Ok(_) => {
-                    flag.index.chapter  = chapter_index .parse::<u16>().unwrap_or(0);
-                    flag.index.verse    = verse_index   .parse::<u16>().unwrap_or(0);
-                    flag.outdex.chapter = chapter_index .parse::<u16>().unwrap_or(0);
-                    flag.outdex.verse   = verse_index   .parse::<u16>().unwrap_or(0);
-                },
-                Err(_) => {
-                    continue;
-                }
-            
+            if chapter_index == "0" || verse_index == "0" {
+                println!("Invalid verse entered. Cannot accept verse 0 or chapter 0.");
+                return Err(FlagErr);
             }
+            
+            
+            flag.index.chapter  = parse_num(chapter_index) .unwrap();
+            flag.index.verse    = parse_num(verse_index)   .unwrap();
+            flag.outdex.chapter = parse_num(chapter_index) .unwrap();
+            flag.outdex.verse   = parse_num(verse_index)   .unwrap();
+            
         }
         else {
             let splits : Vec<&str> = arg.split(':').collect();
             let (chapter_index, verse_index) = (splits[0],splits[1]);
             
+            if chapter_index == "0" || verse_index == "0" {
+                println!("Invalid verse entered. cannot accept verse 0 or chapter 0.");
+                return Err(FlagErr);
+            }
+            
             match chapter_index.parse::<u16>(){
                 Ok(_) => {
-                    flag.outdex.chapter = chapter_index .parse::<u16>().unwrap_or(0);
-                    flag.outdex.verse   = verse_index   .parse::<u16>().unwrap_or(0);
+                    flag.outdex.chapter = parse_num(chapter_index) .unwrap();
+                    flag.outdex.verse   = parse_num(verse_index)   .unwrap();
                 },
                 Err(_) => {
                     continue;
@@ -124,4 +133,11 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
     }
     
     Ok(flag)
+}
+
+fn parse_num(numstr:&str) -> Option<u16> {
+    match numstr.parse::<u16>() {
+        Ok(num) => Some(num),
+        Err(error) => panic!("Invalid value entered, expected a non 0 integer.\n{}",error),
+    }
 }
