@@ -3,12 +3,9 @@
 quran-ref
 Display the verses of the quran in various english translations using references
 
-
-
 ## Installation
 
 - not available for installation yet as project is yet to reach a usable state
-
 
 ## Usage
 
@@ -30,8 +27,6 @@ OPTIONS:
 config contains island index
 config is stored in ~/.config/quran-ref/"
 ```
-
-
 
 ## Todo
 
