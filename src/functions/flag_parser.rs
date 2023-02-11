@@ -8,7 +8,7 @@ pub struct Flag {
     pub edit   : bool,
     pub arabic : bool,
     pub index  : VerseIndex,
-    pub outdex : VerseIndex,
+    pub endex  : VerseIndex,
 }
 impl Flag {
     fn new() -> Flag {
@@ -17,7 +17,7 @@ impl Flag {
         edit   : false,
         arabic : false,
         index  : VerseIndex::new(),
-        outdex : VerseIndex::new(),
+        endex  : VerseIndex::new(),
         }
     }
 }
@@ -105,8 +105,8 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
             
             flag.index.chapter  = parse_num(chapter_index) .unwrap();
             flag.index.verse    = parse_num(verse_index)   .unwrap();
-            flag.outdex.chapter = parse_num(chapter_index) .unwrap();
-            flag.outdex.verse   = parse_num(verse_index)   .unwrap();
+            flag.endex.chapter  = parse_num(chapter_index) .unwrap();
+            flag.endex.verse    = parse_num(verse_index)   .unwrap();
             
         }
         else {
@@ -120,8 +120,8 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
             
             match chapter_index.parse::<u16>(){
                 Ok(_) => {
-                    flag.outdex.chapter = parse_num(chapter_index) .unwrap();
-                    flag.outdex.verse   = parse_num(verse_index)   .unwrap();
+                    flag.endex.chapter  = parse_num(chapter_index) .unwrap();
+                    flag.endex.verse    = parse_num(verse_index)   .unwrap();
                 },
                 Err(_) => {
                     continue;

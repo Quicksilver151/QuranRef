@@ -5,6 +5,7 @@ use std::env;
 pub use serde::{Serialize, Deserialize};
 pub use signal_hook::{consts::SIGINT, iterator::Signals};
 
+include!(concat!(env!("OUT_DIR"), "/db.rs"));
 // include files
 mod functions;
 mod structs;
@@ -16,7 +17,7 @@ use structs::*;
 fn main() {
     // init
     handle_ctrlc();
-    
+    dbg!(OKK);
     // load config
     let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
     let cfg =
