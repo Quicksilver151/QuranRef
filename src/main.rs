@@ -35,7 +35,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let flag: Flag = match flag_parser::parse_args(args) {
         Ok(flag) => flag,
-        Err(_flag) => {println!("{}",HELP_TEXT); return;},
+        Err(_flag) => {println!("flag_err:{_flag:?}\n{}",HELP_TEXT); return;},
     };
     
     dbg!(&flag);
