@@ -14,8 +14,7 @@ pub struct Flag {
     pub help   : bool,
     pub edit   : bool,
     pub arabic : bool,
-    pub index  : VerseIndex,
-    pub endex  : VerseIndex,
+    pub verses : VerseRange
 }
 impl Flag {
     fn new() -> Flag {
@@ -23,8 +22,7 @@ impl Flag {
         help   : false,
         edit   : false,
         arabic : false,
-        index  : VerseIndex::new(),
-        endex  : VerseIndex::new(),
+        verses : VerseRange::new(),
         }
     }
 }
@@ -39,9 +37,9 @@ Display the verses of the quran in various english translations using references
 Usage: quran-ref [OPTIONS] <START_CHAPTER:START_VERSE> <END_CHAPTER:END_VERSE>
 
 eg: 
-> quran-ref 21:12
-> quran-ref 12:3 12:8
-> quran-ref -a 3:23 4:10
+$ quran-ref 21:12
+$ quran-ref 12:3 12:8
+$ quran-ref -a 3:23 4:10
 
 OPTIONS:
     -h, --help          shows this help section
@@ -99,10 +97,10 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
             println!("Invalid verse format. ':' required");
             return Err(FlagErr::Broken);
         }
-        else if flag.index.chapter == 0 {
+        else if flag.verses.index.chapter == 0 {
             
-            flag.index = parse_verse(&arg)?;
-            flag.endex = parse_verse(&arg)?;
+            flag.verses.index = parse_verse(&arg)?;
+            flag.verses.endex = parse_verse(&arg)?;
             
         }
         else {
@@ -116,8 +114,8 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
             
             match chapter_index.parse::<u16>(){
                 Ok(_) => {
-                    flag.endex.chapter  = parse_num(chapter_index) .unwrap();
-                    flag.endex.verse    = parse_num(verse_index)   .unwrap();
+                    flag.verses.endex.chapter  = parse_num(chapter_index) .unwrap();
+                    flag.verses.endex.verse    = parse_num(verse_index)   .unwrap();
                 },
                 Err(_) => {
                     continue;
@@ -139,7 +137,11 @@ fn parse_num(numstr:&str) -> Option<u16> {
 }
 
 fn parse_verse(verse_str: &str) -> Result<VerseIndex, FlagErr>{
-    let splits : Vec<&str> = verse_str.split(':').collect();
+    let splits : Vec<&str> = verse_str.split('-').collect();
+    
+    let (index, endex) = (splits[0],splits[1]);
+    
+    let splits : Vec<&str> = index.split(':').collect();
         
     let (chapter_index, verse_index) = (splits[0],splits[1]);
     

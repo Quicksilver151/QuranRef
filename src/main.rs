@@ -48,7 +48,7 @@ fn main() {
     if flag.edit {
         todo!("edit function");
     } 
-    if flag.index.chapter == 0 {
+    if flag.verses.index.chapter == 0 {
         println!("{}",HELP_TEXT);
         return;
     }
