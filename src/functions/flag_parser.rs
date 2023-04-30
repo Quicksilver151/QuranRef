@@ -149,8 +149,17 @@ fn parse_num(numstr:&str) -> Option<u16> {
     }
 }
 
-fn parse_verse(verse_str: &str) -> Option<VerseIndex>{
-    todo!()
+fn parse_verse(verse_str: &str) -> Result<VerseIndex, FlagErr>{
+    let splits : Vec<&str> = verse_str.split(':').collect();
+        
+    let (chapter_index, verse_index) = (splits[0],splits[1]);
+    
+    if chapter_index == "0" || verse_index == "0" {
+        println!("Invalid verse entered. Cannot accept verse 0 or chapter 0.");
+        return Err(FlagErr::Missing);
+    }
+    
+    Ok(VerseIndex { chapter: parse_num(chapter_index).unwrap(), verse: parse_num(verse_index).unwrap()})
 }
 
 
