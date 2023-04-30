@@ -100,20 +100,9 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
             return Err(FlagErr::Broken);
         }
         else if flag.index.chapter == 0 {
-            let splits : Vec<&str> = arg.split(':').collect();
             
-            let (chapter_index, verse_index) = (splits[0],splits[1]);
-            
-            if chapter_index == "0" || verse_index == "0" {
-                println!("Invalid verse entered. Cannot accept verse 0 or chapter 0.");
-                return Err(FlagErr::Missing);
-            }
-            
-            
-            flag.index.chapter  = parse_num(chapter_index) .unwrap();
-            flag.index.verse    = parse_num(verse_index)   .unwrap();
-            flag.endex.chapter  = parse_num(chapter_index) .unwrap();
-            flag.endex.verse    = parse_num(verse_index)   .unwrap();
+            flag.index = parse_verse(&arg)?;
+            flag.endex = parse_verse(&arg)?;
             
         }
         else {
