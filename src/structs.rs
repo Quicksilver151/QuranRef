@@ -26,6 +26,13 @@ impl VerseIndex {
         VerseIndex { chapter: parse_num(chapter_index).unwrap(), verse: parse_num(verse_index).unwrap()}
         
     } 
+    pub fn from_range(index: &str, range: u16) -> VerseIndex {
+        let splits : Vec<&str> = index.split(':').collect();
+        let (chapter_index, verse_index) = (splits[0],splits[1]);
+        
+        VerseIndex { chapter: parse_num(chapter_index).unwrap(), verse:  parse_num(verse_index).unwrap().max(range)}
+        
+    } 
 }
 
 #[derive(Debug)]
@@ -40,14 +47,14 @@ impl VerseRange {
     pub fn new() -> VerseRange {
         VerseRange { index: VerseIndex::new(), endex: VerseIndex::new() }
     }
-    pub fn from(verse_str: &str, limit: u16) -> Result<VerseRange, VerseErr> {
+    pub fn from(verse_str: &str) -> Result<VerseRange, VerseErr> {
         let splits : Vec<&str> = verse_str.split('-').collect();
         
-        let (index, endex) = (splits[0],splits[1]);
+        let (index, range) = (splits[0], parse_num(splits[1]).unwrap());
         
         Ok(VerseRange {
             index: VerseIndex::from(index),
-            endex: VerseIndex::from(endex),
+            endex: VerseIndex::from_range(index, range),
         })
     }
     
@@ -56,7 +63,7 @@ impl VerseRange {
     }
 }
 pub fn parse_num(numstr: &str) -> Result<u16, VerseErr> {
-    numstr.parse::<u16>().map_err(|e|VerseErr::Invalid)
+    numstr.parse::<u16>().map_err(|_|VerseErr::Invalid)
 }
 
 
