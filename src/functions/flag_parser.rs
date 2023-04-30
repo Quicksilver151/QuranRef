@@ -148,3 +148,9 @@ fn parse_num(numstr:&str) -> Option<u16> {
         Err(error) => panic!("Invalid value entered, expected a non 0 integer.\n{}",error),
     }
 }
+
+fn parse_verse(verse_str: &str) -> Option<VerseIndex>{
+    todo!()
+}
+
+
