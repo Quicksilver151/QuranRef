@@ -1,9 +1,14 @@
 // std
 use std::env;
 
+
 // crates
 pub use serde::{Serialize, Deserialize};
 pub use signal_hook::{consts::SIGINT, iterator::Signals};
+// use hyper::Client;
+use tokio::sync;
+use reqwest::get;
+use serde_json;
 
 include!(concat!(env!("OUT_DIR"), "/db.rs"));
 // include files
@@ -40,6 +45,15 @@ fn main() {
     
     dbg!(&flag);
     
+    
+    
+    
+    
+    
+    
+    get_data();
+    
+    
     // branch flags
     if flag.help {
         println!("{}",HELP_TEXT);
@@ -55,6 +69,32 @@ fn main() {
     if flag.arabic {
         todo!("display verses in arabic");
     }
-       
     
 }
+
+
+#[tokio::main]
+async fn get_data(){
+    // testing
+    // let client = Client::new();
+    // 
+    // // Parse an `http::Uri`...
+    // let uri = "http://api.quran.com/api/v4/verses/by_key/2:225?language=en&translations=823".parse().unwrap();
+    // 
+    // // Await the response...(not)
+    // let resp = client.get(uri).await;
+    // 
+    // println!("Response: {:?}", resp.unwrap());
+    
+    let body = reqwest::get("http://api.quran.com/api/v4/verses/by_key/2:225?language=en&translations=823")
+        .await.unwrap()
+        .text()
+        .await.unwrap();
+    
+    
+    
+    println!("{}", body);
+    
+}
+
+
