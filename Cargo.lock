@@ -586,7 +586,6 @@ name = "quran-ref"
 version = "0.1.0"
 dependencies = [
  "confy",
- "hyper",
  "reqwest",
  "serde",
  "serde_json",

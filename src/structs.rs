@@ -10,7 +10,7 @@ impl Config {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct VerseIndex {
     pub chapter : u16,
     pub verse   : u16,

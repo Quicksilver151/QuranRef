@@ -1,5 +1,5 @@
 // std
-use std::env;
+use std::{env, ptr::NonNull};
 
 
 // crates
@@ -50,9 +50,10 @@ fn main() {
     
     
     
-    
-    get_data();
-    
+    for i in 1..8{
+        get_data(&format!("1:{}",i));
+        println!("=====================================================")
+    }
     
     // branch flags
     if flag.help {
@@ -72,28 +73,51 @@ fn main() {
     
 }
 
+#[derive(Default, Debug, Serialize, Deserialize)]
+struct Translation {
+    id: u32,
+    resource_id: u32,
+    text: String,
+}
+
+#[derive(Default, Debug, Serialize, Deserialize)]
+struct Data {
+    verse: Verse,
+}
+#[derive(Default, Debug, Serialize, Deserialize)]
+struct Verse {
+    id: u16,
+    verse_number: u16,
+    verse_key: String,
+    hizb_number: u16,
+    rub_el_hizb_number: u16,
+    ruku_number: u16,
+    manzil_number: u16,
+    sajdah_number: Option<u16>,
+    page_number: u16,
+    juz_number: u16,
+    translations: Vec<Translation>,
+}
 
 #[tokio::main]
-async fn get_data(){
-    // testing
-    // let client = Client::new();
-    // 
-    // // Parse an `http::Uri`...
-    // let uri = "http://api.quran.com/api/v4/verses/by_key/2:225?language=en&translations=823".parse().unwrap();
-    // 
-    // // Await the response...(not)
-    // let resp = client.get(uri).await;
-    // 
-    // println!("Response: {:?}", resp.unwrap());
+async fn get_data(verse_index: &str){
     
-    let body = reqwest::get("http://api.quran.com/api/v4/verses/by_key/2:225?language=en&translations=823")
+    // sahih international
+    let body = reqwest::get(format!("https://api.quran.com/api/v4/verses/by_key/{}?language=en&translations=20",verse_index))
         .await.unwrap()
         .text()
         .await.unwrap();
     
+    let sahih: Data = serde_json::from_str(&body).unwrap_or_default();
     
+    let body = reqwest::get(format!("https://api.quran.com/api/v4/verses/by_key/{}?language=en&translations=131",verse_index))
+        .await.unwrap()
+        .text()
+        .await.unwrap();
     
-    println!("{}", body);
+    let clear: Data = serde_json::from_str(&body).unwrap_or_default();
+
+    println!("{}\n----------------------\n{}", sahih.verse.translations[0].text, clear.verse.translations[0].text);
     
 }
 
