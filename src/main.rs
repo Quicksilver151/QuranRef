@@ -46,14 +46,14 @@ fn main() {
     dbg!(&flag);
     
     
+    println!("VERSEEE={}",&flag.verses.index);
     
     
     
-    
-    for i in 1..8{
-        get_data(&format!("1:{}",i));
-        println!("=====================================================")
-    }
+    // for i in 1..8{
+    //     get_data(&format!("1:{}",i));
+    //     println!("================================================================")
+    // }
     
     // branch flags
     if flag.help {
@@ -116,8 +116,8 @@ async fn get_data(verse_index: &str){
         .await.unwrap();
     
     let clear: Data = serde_json::from_str(&body).unwrap_or_default();
-
-    println!("{}\n----------------------\n{}", sahih.verse.translations[0].text, clear.verse.translations[0].text);
+    
+    println!("{:64}\n----------------------------------------------------------------\n{:64}", sahih.verse.translations[0].text, clear.verse.translations[0].text);
     
 }
 

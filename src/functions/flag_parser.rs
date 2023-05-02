@@ -6,7 +6,6 @@ pub enum FlagErr {
     Invalid,
     Broken,
     Missing,
-
 }
 
 #[derive(Debug)]

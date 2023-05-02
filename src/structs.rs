@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::*;
 
 #[derive(Default, Debug, Serialize, Deserialize)]
@@ -9,6 +11,10 @@ impl Config {
         Config { translations : vec![] }
     }
 }
+
+
+#[derive(Debug)]
+pub enum VerseErr{NotFound, Invalid, LimitExceeded, Empty}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct VerseIndex {
@@ -34,9 +40,13 @@ impl VerseIndex {
         
     } 
 }
+impl Display for VerseIndex {
+    fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(w, "{}:{}", self.chapter, self.verse)
+    }
+}
 
-#[derive(Debug)]
-pub enum VerseErr{NotFound, Invalid, LimitExceeded, Empty}
+
 
 #[derive(Debug)]
 pub struct VerseRange {
