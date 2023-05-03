@@ -43,13 +43,16 @@ fn main() {
         Err(_flag) => {println!("flag_err:{_flag:?}\n{}",HELP_TEXT); return;},
     };
     
-    dbg!(&flag);
+    // dbg!(&flag);
     
     
-    println!("VERSEEE=");
-    flag.verses.to_vec().iter().for_each(|x| println!("{}",x));
+    // println!("VERSEEE=");
+    // flag.verses.to_vec().iter().for_each(|x| println!("{}",x));
     
     
+    for i in flag.verses.to_vec().iter() {
+        get_data(i);
+    }
     
     // for i in 1..8{
     //     get_data(&format!("1:{}",i));
@@ -101,7 +104,7 @@ struct Verse {
 }
 
 #[tokio::main]
-async fn get_data(verse_index: &str){
+async fn get_data(verse_index: &VerseIndex){
     
     // sahih international
     let body = reqwest::get(format!("https://api.quran.com/api/v4/verses/by_key/{}?language=en&translations=20",verse_index))
