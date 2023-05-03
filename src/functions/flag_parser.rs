@@ -96,11 +96,15 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
             println!("Invalid verse format. ':' required");
             return Err(FlagErr::Broken);
         }
-
         // index
-        else if flag.verses.index.chapter == 0 { 
+        else if arg.contains('-') {
             flag.verses = VerseRange::from(&arg).unwrap();
+        }else if flag.verses.index.chapter == 0{
+            flag.verses.index = VerseIndex::from(&arg);
+        }else{
+            flag.verses.endex = VerseIndex::from(&arg);    
         }
+        
         // endex
         // else {
         //     let splits : Vec<&str> = arg.split(':').collect();

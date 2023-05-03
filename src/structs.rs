@@ -58,13 +58,15 @@ impl VerseRange {
         VerseRange { index: VerseIndex::new(), endex: VerseIndex::new() }
     }
     pub fn from(verse_str: &str) -> Result<VerseRange, VerseErr> {
-        let splits : Vec<&str> = verse_str.split('-').collect();
         
-        let (index, range) = (splits[0], parse_num(splits[1]).unwrap());
+        let splits : Vec<&str> = verse_str.split('-').collect();
+        let chapter: Vec<&str> = splits[0].split(':').collect();
+        let (index, endex) = (splits[0], &format!("{}:{}", chapter[0], splits[1]));
+        
         
         Ok(VerseRange {
             index: VerseIndex::from(index),
-            endex: VerseIndex::from_range(index, range),
+            endex: VerseIndex::from(endex),
         })
     }
     

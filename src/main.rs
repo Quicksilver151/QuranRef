@@ -43,7 +43,7 @@ fn main() {
         Err(_flag) => {println!("flag_err:{_flag:?}\n{}",HELP_TEXT); return;},
     };
     
-    // dbg!(&flag);
+    dbg!(&flag);
     
     
     // println!("VERSEEE=");
