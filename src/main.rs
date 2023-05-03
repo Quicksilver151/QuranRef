@@ -50,13 +50,14 @@ fn main() {
     // flag.verses.to_vec().iter().for_each(|x| println!("{}",x));
     
     
+    println!("================================================================");
     for i in flag.verses.to_vec().iter() {
         get_data(i);
+        println!("================================================================");
     }
     
     // for i in 1..8{
     //     get_data(&format!("1:{}",i));
-    //     println!("================================================================")
     // }
     
     // branch flags
@@ -121,7 +122,7 @@ async fn get_data(verse_index: &VerseIndex){
     
     let clear: Data = serde_json::from_str(&body).unwrap_or_default();
     
-    println!("{:64}\n----------------------------------------------------------------\n{:64}", sahih.verse.translations[0].text, clear.verse.translations[0].text);
+    println!("{}\n----------------------------------------------------------------\n{}", sahih.verse.translations[0].text, clear.verse.translations[0].text);
     
 }
 
