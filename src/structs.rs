@@ -71,6 +71,17 @@ impl VerseRange {
     pub fn is_in_order(&self) -> bool{
         true
     }
+    
+    pub fn to_vec(&self) -> Vec<VerseIndex>{
+        let mut verse_indexes: Vec<VerseIndex> = vec![];
+        
+        for i in self.index.verse..(self.endex.verse+1) {
+            verse_indexes.append(&mut vec![VerseIndex {chapter:self.index.chapter, verse: i}])
+        }
+        
+        verse_indexes
+    }
+    
 }
 pub fn parse_num(numstr: &str) -> Result<u16, VerseErr> {
     numstr.parse::<u16>().map_err(|_|VerseErr::Invalid)

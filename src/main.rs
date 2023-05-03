@@ -46,7 +46,8 @@ fn main() {
     dbg!(&flag);
     
     
-    println!("VERSEEE={}",&flag.verses.index);
+    println!("VERSEEE=");
+    flag.verses.to_vec().iter().for_each(|x| println!("{}",x));
     
     
     
