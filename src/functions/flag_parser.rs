@@ -20,19 +20,29 @@ pub const HELP_TEXT : &str =
 "quran-ref
 Display the verses of the quran in various english translations using references
 
-Usage: quran-ref [OPTIONS] <START_CHAPTER:START_VERSE> <END_CHAPTER:END_VERSE>
+Usage:  quran-ref [OPTIONS] <START_CHAPTER:START_VERSE> <END_CHAPTER:END_VERSE>
+            or
+        quran-ref [OPTIONS] <START_CHAPTER:START_VERSE>-<END_VERSE>
 
-eg: 
-$ quran-ref 21:12
-$ quran-ref 12:3 12:8
-$ quran-ref -a 3:23-28
-$ quran-ref -a 3:10 3:24
 
 OPTIONS:
     -h, --help          shows this help section
     -e, --edit          configure the program
     -a, --arabic        includes the arabic part
-    
+ 
+eg: 
+$ quran-ref 21:12
+
+$ quran-ref 12:3 12:8 
+    (prints verses in range [12:3, 12:4, 12:5, 12:6, 12:7, 12:8])
+
+$ quran-ref -a 3:23-28
+    (prints verses in range [3:23, 3:24, 3:25, 3:26, 3:27, 3:28] with arabic)
+
+$ quran-ref -a 3:10 3:14
+    (prints verses in range [3:10, 3:11, 3:12, 3:13, 3:14] with arabic)
+
+   
 config contains island index
 config is stored in ~/.config/quran-ref/";
 
