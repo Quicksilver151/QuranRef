@@ -16,15 +16,12 @@ impl Config {
 #[derive(Debug)]
 pub enum VerseErr{NotFound, Invalid, LimitExceeded, Empty}
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Default, Debug, Serialize, Deserialize)]
 pub struct VerseIndex {
     pub chapter : u16,
     pub verse   : u16,
 }
 impl VerseIndex {
-    pub fn new() -> VerseIndex {
-        VerseIndex { chapter: 0, verse: 0 }
-    }
     pub fn from(index: &str) -> VerseIndex {
         let splits : Vec<&str> = index.split(':').collect();
         let (chapter_index, verse_index) = (splits[0],splits[1]);
@@ -48,15 +45,12 @@ impl Display for VerseIndex {
 
 
 
-#[derive(Debug)]
+#[derive(Default, Debug)]
 pub struct VerseRange {
     pub index : VerseIndex,
     pub endex : VerseIndex,
 }
 impl VerseRange {
-    pub fn new() -> VerseRange {
-        VerseRange { index: VerseIndex::new(), endex: VerseIndex::new() }
-    }
     pub fn from(verse_str: &str) -> Result<VerseRange, VerseErr> {
         
         let splits : Vec<&str> = verse_str.split('-').collect();
@@ -71,7 +65,11 @@ impl VerseRange {
     }
     
     pub fn is_in_order(&self) -> bool{
-        true
+        self.index.chapter < self.endex.chapter ||
+        (
+            self.index.chapter == self.endex.chapter &&
+            self.index.verse <= self.endex.verse
+        )
     }
     
     pub fn to_vec(&self) -> Vec<VerseIndex>{
@@ -89,5 +87,53 @@ pub fn parse_num(numstr: &str) -> Result<u16, VerseErr> {
     numstr.parse::<u16>().map_err(|_|VerseErr::Invalid)
 }
 
+
+
+#[derive(Default, Debug, Serialize, Deserialize)]
+pub struct Translation {
+    id: u32,
+    resource_id: u32,
+    text: String,
+}
+
+#[derive(Default, Debug, Serialize, Deserialize)]
+pub struct VerseData {
+    verse: Verse,
+}
+#[derive(Default, Debug, Serialize, Deserialize)]
+pub struct Verse {
+    id: u16,
+    verse_number: u16,
+    verse_key: String,
+    hizb_number: u16,
+    rub_el_hizb_number: u16,
+    ruku_number: u16,
+    manzil_number: u16,
+    sajdah_number: Option<u16>,
+    page_number: u16,
+    juz_number: u16,
+    translations: Vec<Translation>,
+}
+
+#[tokio::main]
+pub async fn get_data(verse_index: &VerseIndex){
+    
+    // sahih international
+    
+    let sahih = get_verse_data(verse_index,  20).await;
+    let clear = get_verse_data(verse_index, 131).await;
+    
+    println!("{}\n----------------------------------------------------------------\n{}", sahih.verse.translations[0].text, clear.verse.translations[0].text);
+}
+
+
+pub async fn get_verse_data(verse_index: &VerseIndex, translation: u16) -> VerseData{
+    let body = reqwest::get(format!("https://api.quran.com/api/v4/verses/by_key/{}?language=en&translations={}",verse_index, translation))
+        .await.unwrap()
+        .text()
+        .await.unwrap();
+    
+    serde_json::from_str(&body).unwrap_or_default()
+}
 
 

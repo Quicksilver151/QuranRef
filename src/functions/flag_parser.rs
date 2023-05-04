@@ -8,26 +8,13 @@ pub enum FlagErr {
     Missing,
 }
 
-#[derive(Debug)]
+#[derive(Default, Debug)]
 pub struct Flag {
     pub help   : bool,
     pub edit   : bool,
     pub arabic : bool,
     pub verses : VerseRange
 }
-impl Flag {
-    fn new() -> Flag {
-        Flag {
-        help   : false,
-        edit   : false,
-        arabic : false,
-        verses : VerseRange::new(),
-        }
-    }
-}
-
-
-
 
 pub const HELP_TEXT : &str =
 "quran-ref
@@ -38,7 +25,8 @@ Usage: quran-ref [OPTIONS] <START_CHAPTER:START_VERSE> <END_CHAPTER:END_VERSE>
 eg: 
 $ quran-ref 21:12
 $ quran-ref 12:3 12:8
-$ quran-ref -a 3:23 4:10
+$ quran-ref -a 3:23-28
+$ quran-ref -a 3:10 3:24
 
 OPTIONS:
     -h, --help          shows this help section
@@ -56,7 +44,7 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
     args.reverse();
     
     // println!("{:?}",args);
-    let mut flag: Flag = Flag::new();
+    let mut flag: Flag = Flag::default();
     
     for arg in args {
         let arg_vec: Vec<char> = arg.chars().collect::<Vec<char>>();
@@ -101,6 +89,7 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
             flag.verses = VerseRange::from(&arg).unwrap();
         }else if flag.verses.index.chapter == 0 {
             flag.verses.index = VerseIndex::from(&arg);
+            flag.verses.endex = VerseIndex::from(&arg);
         }else{
             flag.verses.endex = VerseIndex::from(&arg);    
         }

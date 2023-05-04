@@ -1,19 +1,14 @@
 // std
-use std::{env, ptr::NonNull};
-
+use std::env;
 
 // crates
 pub use serde::{Serialize, Deserialize};
 pub use signal_hook::{consts::SIGINT, iterator::Signals};
-// use hyper::Client;
-use tokio::sync;
-use reqwest::get;
-use serde_json;
 
-include!(concat!(env!("OUT_DIR"), "/db.rs"));
 // include files
 mod functions;
 mod structs;
+// include!(concat!(env!("OUT_DIR"), "/db.rs"));
 
 // use files
 use functions::*;
@@ -22,7 +17,7 @@ use structs::*;
 fn main() {
     // init
     handle_ctrlc();
-    dbg!(OKK);
+    // dbg!(OKK);//buildscript test
     // load config
     let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
     let cfg =
@@ -49,7 +44,11 @@ fn main() {
     // println!("VERSEEE=");
     // flag.verses.to_vec().iter().for_each(|x| println!("{}",x));
     
-    
+    if flag.verses.is_in_order(){
+        println!("fetching verses:");
+    }else{
+        todo!("properly handle verses in reverse order");
+    }
     println!("================================================================");
     for i in flag.verses.to_vec().iter() {
         get_data(i);
@@ -75,55 +74,8 @@ fn main() {
     if flag.arabic {
         todo!("display verses in arabic");
     }
-    
 }
 
-#[derive(Default, Debug, Serialize, Deserialize)]
-struct Translation {
-    id: u32,
-    resource_id: u32,
-    text: String,
-}
 
-#[derive(Default, Debug, Serialize, Deserialize)]
-struct Data {
-    verse: Verse,
-}
-#[derive(Default, Debug, Serialize, Deserialize)]
-struct Verse {
-    id: u16,
-    verse_number: u16,
-    verse_key: String,
-    hizb_number: u16,
-    rub_el_hizb_number: u16,
-    ruku_number: u16,
-    manzil_number: u16,
-    sajdah_number: Option<u16>,
-    page_number: u16,
-    juz_number: u16,
-    translations: Vec<Translation>,
-}
-
-#[tokio::main]
-async fn get_data(verse_index: &VerseIndex){
-    
-    // sahih international
-    let body = reqwest::get(format!("https://api.quran.com/api/v4/verses/by_key/{}?language=en&translations=20",verse_index))
-        .await.unwrap()
-        .text()
-        .await.unwrap();
-    
-    let sahih: Data = serde_json::from_str(&body).unwrap_or_default();
-    
-    let body = reqwest::get(format!("https://api.quran.com/api/v4/verses/by_key/{}?language=en&translations=131",verse_index))
-        .await.unwrap()
-        .text()
-        .await.unwrap();
-    
-    let clear: Data = serde_json::from_str(&body).unwrap_or_default();
-    
-    println!("{}\n----------------------------------------------------------------\n{}", sahih.verse.translations[0].text, clear.verse.translations[0].text);
-    
-}
 
 
