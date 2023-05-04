@@ -25,9 +25,10 @@ fn main() {
             Ok (cfg_result) => cfg_result,
             Err(cfg_result) => {
                 println!("{}", cfg_result);
-                Config::new()
+                Config::default()
             }
         };
+    dbg!(&cfg);
     
     confy::store("quran-ref", None, cfg).unwrap_or_default();
     
@@ -44,20 +45,6 @@ fn main() {
     // println!("VERSEEE=");
     // flag.verses.to_vec().iter().for_each(|x| println!("{}",x));
     
-    if flag.verses.is_in_order(){
-        println!("fetching verses:");
-    }else{
-        todo!("properly handle verses in reverse order");
-    }
-    println!("================================================================");
-    for i in flag.verses.to_vec().iter() {
-        get_data(i);
-        println!("================================================================");
-    }
-    
-    // for i in 1..8{
-    //     get_data(&format!("1:{}",i));
-    // }
     
     // branch flags
     if flag.help {
@@ -67,15 +54,35 @@ fn main() {
     if flag.edit {
         todo!("edit function");
     } 
+    if flag.arabic {
+        todo!("display verses in arabic");
+    }
     if flag.verses.index.chapter == 0 {
         println!("{}",HELP_TEXT);
         return;
     }
-    if flag.arabic {
-        todo!("display verses in arabic");
+    if flag.verses.is_in_order(){
+        println!("fetching verses:");
+    }else{
+        todo!("handle verses in reverse order");
     }
+    println!("================================================================");
+    for i in flag.verses.to_vec().iter() {
+        print_data(i);
+        println!("================================================================");
+    }
+    
 }
 
 
+
+#[tokio::main]
+pub async fn print_data(verse_index: &VerseIndex){
+    
+    let sahih : VerseData = get_verse_data(verse_index,  20).await;
+    let clear : VerseData = get_verse_data(verse_index, 131).await;
+    
+    println!("{}\n----------------------------------------------------------------\n{}", sahih.verse.translations[0].text, clear.verse.translations[0].text);
+}
 
 

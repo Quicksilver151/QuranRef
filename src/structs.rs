@@ -5,11 +5,7 @@ use crate::*;
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Config {
     pub translations: Vec<u8>,
-}
-impl Config {
-    pub fn new() -> Config {
-        Config { translations : vec![] }
-    }
+    pub arabic : bool,
 }
 
 
@@ -91,43 +87,33 @@ pub fn parse_num(numstr: &str) -> Result<u16, VerseErr> {
 
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Translation {
-    id: u32,
-    resource_id: u32,
-    text: String,
+    pub id: u32,
+    pub resource_id: u32,
+    pub text: String,
 }
 
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct VerseData {
-    verse: Verse,
+    pub verse: Verse,
 }
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Verse {
-    id: u16,
-    verse_number: u16,
-    verse_key: String,
-    hizb_number: u16,
-    rub_el_hizb_number: u16,
-    ruku_number: u16,
-    manzil_number: u16,
-    sajdah_number: Option<u16>,
-    page_number: u16,
-    juz_number: u16,
-    translations: Vec<Translation>,
-}
-
-#[tokio::main]
-pub async fn get_data(verse_index: &VerseIndex){
-    
-    // sahih international
-    
-    let sahih = get_verse_data(verse_index,  20).await;
-    let clear = get_verse_data(verse_index, 131).await;
-    
-    println!("{}\n----------------------------------------------------------------\n{}", sahih.verse.translations[0].text, clear.verse.translations[0].text);
+    pub id: u16,
+    pub verse_number: u16,
+    pub verse_key: String,
+    pub hizb_number: u16,
+    pub rub_el_hizb_number: u16,
+    pub ruku_number: u16,
+    pub manzil_number: u16,
+    pub sajdah_number: Option<u16>,
+    pub page_number: u16,
+    pub juz_number: u16,
+    pub translations: Vec<Translation>,
 }
 
 
-pub async fn get_verse_data(verse_index: &VerseIndex, translation: u16) -> VerseData{
+
+pub async fn get_verse_data(verse_index: &VerseIndex, translation: u16) -> VerseData {
     let body = reqwest::get(format!("https://api.quran.com/api/v4/verses/by_key/{}?language=en&translations={}",verse_index, translation))
         .await.unwrap()
         .text()
