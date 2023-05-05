@@ -96,6 +96,14 @@ pub struct Translation {
 pub struct VerseData {
     pub verse: Verse,
 }
+impl std::fmt::Display for VerseData {
+    fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        let wraped_text = textwrap::fill(&self.verse.translations[0].text, 64);
+        write!(w, "{}", wraped_text.blue())
+    }
+}
+
+
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Verse {
     pub id: u16,

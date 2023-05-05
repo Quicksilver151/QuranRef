@@ -67,11 +67,11 @@ fn main() {
     }else{
         todo!("handle verses in reverse order");
     }
-    println!("================================================================");
     for i in flag.verses.to_vec().iter() {
+        println!("|{}|{}",format!("{}",i).bold(),"===========================================================".red());
         print_data(i);
-        println!("================================================================");
     }
+        println!("{}","================================================================".red());
     
 }
 
@@ -84,9 +84,7 @@ pub async fn print_data(verse_index: &VerseIndex){
     let clear : VerseData = get_verse_data(verse_index, 131).await;
     
     
-    
-    
-    println!("{}\n----------------------------------------------------------------\n{}", textwrap::wrap(&sahih.verse.translations[0].text, 64)[0].red() , clear.verse.translations[0].text);
+    println!("{}\n{}\n{}", sahih, "----------------------------------------------------------------".bright_black(),clear);
 }
 
 
