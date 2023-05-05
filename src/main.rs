@@ -4,6 +4,7 @@ use std::env;
 // crates
 pub use serde::{Serialize, Deserialize};
 pub use signal_hook::{consts::SIGINT, iterator::Signals};
+pub use colored::*;
 
 // include files
 mod functions;
@@ -82,7 +83,10 @@ pub async fn print_data(verse_index: &VerseIndex){
     let sahih : VerseData = get_verse_data(verse_index,  20).await;
     let clear : VerseData = get_verse_data(verse_index, 131).await;
     
-    println!("{}\n----------------------------------------------------------------\n{}", sahih.verse.translations[0].text, clear.verse.translations[0].text);
+    
+    
+    
+    println!("{}\n----------------------------------------------------------------\n{}", textwrap::wrap(&sahih.verse.translations[0].text, 64)[0].red() , clear.verse.translations[0].text);
 }
 
 
