@@ -3,9 +3,9 @@
 quran-ref
 Display the verses of the quran in various english translations using references
 
-- (currently outputs both translations from sahih international and Dr.Mustafa Khattab, the Clear Quran)
+- (currently outputs both translations from Sahih International and Dr.Mustafa Khattab, the Clear Quran)
 
-- (Currently only works online)
+- (Currently only works when online)
 
 ## Installation
 
@@ -14,25 +14,19 @@ Display the verses of the quran in various english translations using references
 ## Usage
 
 `$ quran-ref [OPTIONS] <START_CHAPTER:START_VERSE> <END_CHAPTER:END_VERSE>`
-
 or
-
 `$ quran-ref [OPTIONS] <START_CHAPTER:START_VERSE>-<END_VERSE>`
 
-## Options:
 
 ```
+OPTIONS:
     -h, --help          shows this help section
     -e, --edit          configure the program
-    -a, --arabic        includes the arabic part
+    -a, --arabic        includes the arabic part (yet to be implemented)
 
-config contains island index
-config is stored in ~/.config/quran-ref/"
-```
 
-## Examples
+EXAMPLES:
 
-```sh
 $ quran-ref 21:12
 
 $ quran-ref 12:3 12:8 
@@ -43,6 +37,9 @@ $ quran-ref -a 3:23-28
 
 $ quran-ref -a 3:10 3:14
     (prints verses in range [3:10, 3:11, 3:12, 3:13, 3:14] with arabic)
+
+
+config is stored in ~/.config/quran-ref/"
 ```
 
 ## Todo
@@ -57,6 +54,8 @@ $ quran-ref -a 3:10 3:14
 
 - [x] display literally any valid info
 
+- [ ] deploy to [crates.io](https://crates.io/)
+
 - [ ] select translations
 
 - [ ] make offline mode
@@ -64,5 +63,3 @@ $ quran-ref -a 3:10 3:14
 - [ ] display in Arabic
 
 - [ ] optimize to run in less than 5ms
-
-- [ ] deploy to [crates.io](https://crates.io/)
