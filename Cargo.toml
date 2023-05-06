@@ -1,8 +1,15 @@
 [package]
 name = "quran-ref"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
-
+authors = ["DefaultCube <quicksilverhq151@gmail.com>"]
+license = "MIT"
+description = "Display the verses of the quran in various english translations using references"
+readme = "README.md"
+homepage = "https://github.com/Quicksilver151/QuranRef"
+repository = "https://github.com/Quicksilver151/QuranRef"
+keywords = ["qref", "quran-ref", "quran-reference"]
+categories = ["command-line-utilities"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [profile.release]
