@@ -17,7 +17,6 @@ Display the verses of the quran in various english translations using references
 or
 `$ quran-ref [OPTIONS] <START_CHAPTER:START_VERSE>-<END_VERSE>`
 
-
 ```
 OPTIONS:
     -h, --help          shows this help section
@@ -54,7 +53,9 @@ config is stored in ~/.config/quran-ref/"
 
 - [x] display literally any valid info
 
-- [ ] deploy to [crates.io](https://crates.io/)
+- [x] deploy to [crates.io](https://crates.io/)
+
+- [ ] clean the output of any tags
 
 - [ ] select translations
 
