@@ -84,7 +84,7 @@ pub async fn print_data(verse_index: &VerseIndex){
     let clear : VerseData = get_verse_data(verse_index, 131).await;
     
     
-    println!("{}\n{}\n{}", sahih, "----------------------------------------------------------------".bright_black(),clear);
+    println!("Sahih International:\n{}\n{}\nDr.Mustafa Khattab, the Clear Quran:\n{}", sahih, "----------------------------------------------------------------".bright_black(),clear);
 }
 
 
