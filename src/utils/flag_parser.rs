@@ -5,7 +5,6 @@ use crate::*;
 pub enum FlagErr {
     Invalid,
     Broken,
-    Missing,
 }
 
 #[derive(Default, Debug)]
@@ -93,65 +92,16 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
             println!("Invalid verse format. ':' required");
             return Err(FlagErr::Broken);
         }
-        // index
-        else if arg.contains('-') {
+        else if arg.contains('-') { // index-endex range
             flag.verses = VerseRange::from(&arg).unwrap();
-        }else if flag.verses.index.chapter == 0 {
+        }else if flag.verses.index.chapter == 0 { // index
             flag.verses.index = VerseIndex::from(&arg);
             flag.verses.endex = VerseIndex::from(&arg);
-        }else{
+        }else{ // endex
             flag.verses.endex = VerseIndex::from(&arg);    
         }
         
-        // endex
-        // else {
-        //     let splits : Vec<&str> = arg.split(':').collect();
-        //     let (chapter_index, verse_index) = (splits[0],splits[1]);
-        //     
-        //     if chapter_index == "0" || verse_index == "0" {
-        //         println!("Invalid verse entered. cannot accept verse 0 or chapter 0.");
-        //         return Err(FlagErr::Missing);
-        //     }
-        //     
-        //     match chapter_index.parse::<u16>(){
-        //         Ok(_) => {
-        //             flag.verses.endex.chapter  = parse_num(chapter_index) .unwrap();
-        //             flag.verses.endex.verse    = parse_num(verse_index)   .unwrap();
-        //         },
-        //         Err(_) => {
-        //             continue;
-        //         }
-        //         
-        //     }
-        //     
-        // }
     }
     
     Ok(flag)
 }
-//
-// fn parse_num(numstr:&str) -> Option<u16> {
-//     match numstr.parse::<u16>() {
-//         Ok(num) => Some(num),
-//         Err(error) => panic!("Invalid value entered, expected a non 0 integer.\n{}",error),
-//     }
-// }
-//
-// fn parse_verse(verse_str: &str) -> Result<VerseIndex, FlagErr>{
-//     let splits : Vec<&str> = verse_str.split('-').collect();
-//     
-//     let (index, endex) = (splits[0],splits[1]);
-//     
-//     let splits : Vec<&str> = index.split(':').collect();
-//         
-//     let (chapter_index, verse_index) = (splits[0],splits[1]);
-//     
-//     if chapter_index == "0" || verse_index == "0" {
-//         println!("Invalid verse entered. Cannot accept verse 0 or chapter 0.");
-//         return Err(FlagErr::Missing);
-//     }
-//     
-//     Ok(VerseIndex { chapter: parse_num(chapter_index).unwrap(), verse: parse_num(verse_index).unwrap()})
-// }
-//
-//
