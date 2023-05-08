@@ -7,13 +7,15 @@ pub use signal_hook::{consts::SIGINT, iterator::Signals};
 pub use colored::*;
 
 // include files
-mod functions;
-mod structs;
+mod utils;
+mod models;
+mod api;
 // include!(concat!(env!("OUT_DIR"), "/db.rs"));
 
 // use files
-use functions::*;
-use structs::*;
+use utils::*;
+use models::*;
+use api::*;
 
 fn main() {
     // init
@@ -67,6 +69,7 @@ fn main() {
     }else{
         todo!("handle verses in reverse order");
     }
+    // Main code:
     for i in flag.verses.to_vec().iter() {
         println!("|{}|{}",format!("{}",i).bold(),"===========================================================".red());
         print_data(i);
