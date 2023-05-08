@@ -45,3 +45,14 @@ pub async fn get_verse_data(verse_index: &VerseIndex, translation: u16) -> Verse
     
     serde_json::from_str(&body).unwrap_or_default()
 }
+
+// TODO:
+pub async fn get_translation_data(verse_index: &VerseIndex, translation: u16) -> Translation {
+    let body = reqwest::get(format!("https://api.quran.com/api/v4/verses/by_key/{}?language=en&translations={}",verse_index, translation))
+        .await.unwrap()
+        .text()
+        .await.unwrap();
+    
+    // serde_json::from_str(&body).unwrap_or_default();
+    todo!()
+}
