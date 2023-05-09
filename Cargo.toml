@@ -1,6 +1,6 @@
 [package]
 name = "quran-ref"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 authors = ["DefaultCube <quicksilverhq151@gmail.com>"]
 license = "MIT"

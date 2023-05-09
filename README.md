@@ -14,15 +14,9 @@ Display the verses of the Quran in various English translations using references
 
 `$ quran-ref [OPTIONS] <START_CHAPTER:START_VERSE> <END_CHAPTER:END_VERSE>`
 
-
 or
 
-
 `$ quran-ref [OPTIONS] <START_CHAPTER:START_VERSE>-<END_VERSE>`
-
-
-
-
 
 ```
 OPTIONS:
@@ -49,8 +43,6 @@ $ quran-ref -a 3:10 3:14
 config is stored in ~/.config/quran-ref/"
 ```
 
-
-
 ## Todo
 
 ### version 1.0.0
@@ -65,7 +57,7 @@ config is stored in ~/.config/quran-ref/"
 
 - [x] deploy to [crates.io](https://crates.io/)
 
-- [ ] clean the output of any tags
+- [x] clean the output of any tags
 
 - [ ] select translations
 
