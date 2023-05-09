@@ -14,6 +14,12 @@ impl std::fmt::Display for Translation {
     }
 }
 
+fn remove_section(s: &str, start: usize, end: usize) -> String {
+    let mut result = String::new();
+    result.push_str(&s[..start]);
+    result.push_str(&s[end..]);
+    result
+}
 
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct VerseData {
@@ -21,7 +27,15 @@ pub struct VerseData {
 }
 impl std::fmt::Display for VerseData {
     fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-        let wraped_text = textwrap::fill(&self.verse.translations[0].text, 64);
+        
+        let mut text = self.verse.translations[0].text.to_string();
+        loop{
+            match text.find("<sup"){
+                Some(found) => text = remove_section(&text, found, text.find("</sup>").unwrap_or(found)+6),
+                None => break,
+            };
+        }
+        let wraped_text = textwrap::fill(&text, 64);
         write!(w, "{}", wraped_text.blue())
     }
 }
