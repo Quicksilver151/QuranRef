@@ -1,12 +1,18 @@
 use crate::*;
 
+
+// Structs
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Translation {
     pub id: u32,
     pub resource_id: u32,
     pub text: String,
 }
-
+impl std::fmt::Display for Translation {
+    fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(w, "{}. ({}) {}",self.id, self.resource_id, self.text)
+    }
+}
 
 
 #[derive(Default, Debug, Serialize, Deserialize)]
