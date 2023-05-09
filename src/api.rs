@@ -29,11 +29,14 @@ impl std::fmt::Display for VerseData {
     fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         
         let mut text = self.verse.translations[0].text.to_string();
+        let mut failsafe = 50;
         loop{
             match text.find("<sup"){
                 Some(found) => text = remove_section(&text, found, text.find("</sup>").unwrap_or(found)+6),
                 None => break,
             };
+            failsafe -= 1;
+            if failsafe < 0{break}
         }
         let wraped_text = textwrap::fill(&text, 64);
         write!(w, "{}", wraped_text.blue())
