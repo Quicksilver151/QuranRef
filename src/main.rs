@@ -3,7 +3,6 @@ use std::env;
 
 // crates
 pub use serde::{Serialize, Deserialize};
-pub use signal_hook::{consts::SIGINT, iterator::Signals};
 pub use colored::*;
 
 // include files
@@ -19,7 +18,7 @@ use api::*;
 
 fn main() {
     // init
-    handle_ctrlc();
+    // handle_ctrlc();
     // dbg!(OKK);//buildscript test
     // load config
     let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
@@ -35,6 +34,8 @@ fn main() {
     
     confy::store("quran-ref", None, cfg).unwrap_or_default();
     
+    
+    
     // fetch flags
     let args: Vec<String> = env::args().collect();
     let flag: Flag = match flag_parser::parse_args(args) {
@@ -43,8 +44,6 @@ fn main() {
     };
     
     dbg!(&flag);
-    
-    
     // println!("VERSEEE=");
     // flag.verses.to_vec().iter().for_each(|x| println!("{}",x));
     
