@@ -2,13 +2,17 @@ use crate::*;
 
 
 // Structs
+
+
+
 #[derive(Default, Debug, Serialize, Deserialize)]
-pub struct Translation {
+pub struct TranslationText {
     pub id: u32,
     pub resource_id: u32,
     pub text: String,
 }
-impl std::fmt::Display for Translation {
+
+impl std::fmt::Display for TranslationText {
     fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         write!(w, "{}. ({}) {}",self.id, self.resource_id, self.text)
     }
@@ -55,7 +59,7 @@ pub struct Verse {
     pub sajdah_number: Option<u16>,
     pub page_number: u16,
     pub juz_number: u16,
-    pub translations: Vec<Translation>,
+    pub translations: Vec<TranslationText>,
 }
 
 
@@ -69,13 +73,33 @@ pub async fn get_verse_data(verse_index: &VerseIndex, translation: u16) -> Verse
     serde_json::from_str(&body).unwrap_or_default()
 }
 
+
 // TODO:
-pub async fn get_translation_data(verse_index: &VerseIndex, translation: u16) -> Translation {
-    let body = reqwest::get(format!("https://api.quran.com/api/v4/verses/by_key/{}?language=en&translations={}",verse_index, translation))
+
+#[derive(Default, Debug, Serialize, Deserialize)]
+pub struct Translations {
+    pub translations: Vec<Translation>,
+}
+#[derive(Default, Debug, Serialize, Deserialize)]
+pub struct Translation {
+    pub id: u32,
+    pub name: String,
+    pub author_name: String,
+    pub slug: Option<String>,
+    pub language_name: String,
+    pub translated_name: TranslatedName,
+}
+#[derive(Default, Debug, Serialize, Deserialize)]
+pub struct TranslatedName {
+    pub name: String,
+    pub language_name: String,
+}
+pub async fn get_translation_list() -> Translations {
+    let body = reqwest::get("https://api.quran.com/api/v4/resources/translations")
         .await.unwrap()
         .text()
         .await.unwrap();
     
+    serde_json::from_str(&body).unwrap()
     // serde_json::from_str(&body).unwrap_or_default();
-    todo!()
 }

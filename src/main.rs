@@ -85,6 +85,7 @@ pub async fn print_data(verse_index: &VerseIndex){
     let sahih : VerseData = get_verse_data(verse_index,  20).await;
     let clear : VerseData = get_verse_data(verse_index, 131).await;
     
+    print!("{:?}",get_translation_list().await);
     
     println!("Sahih International:\n{}\n{}\nDr.Mustafa Khattab, the Clear Quran:\n{}", sahih, "----------------------------------------------------------------".bright_black(),clear);
 }
