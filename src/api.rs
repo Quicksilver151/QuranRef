@@ -94,12 +94,18 @@ pub struct TranslatedName {
     pub name: String,
     pub language_name: String,
 }
-pub async fn get_translation_list() -> Translations {
+impl std::fmt::Display for Translation {
+    fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        let splitname:Vec<&str> = self.language_name.split(',').collect();
+        write!(w, "{0}.\t{1:<11}\t{2}",self.id, splitname[0].red(), self.translated_name.name.blue())
+    }
+}
+pub async fn get_translation_list() -> Vec<Translation> {
     let body = reqwest::get("https://api.quran.com/api/v4/resources/translations")
         .await.unwrap()
         .text()
         .await.unwrap();
     
-    serde_json::from_str(&body).unwrap()
+    serde_json::from_str::<Translations>(&body).unwrap().translations
     // serde_json::from_str(&body).unwrap_or_default();
 }

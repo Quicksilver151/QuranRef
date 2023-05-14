@@ -54,7 +54,8 @@ fn main() {
         return;
     }
     if flag.edit {
-        todo!("edit function");
+        print_translations();
+        return;
     } 
     if flag.arabic {
         todo!("display verses in arabic");
@@ -71,7 +72,7 @@ fn main() {
     // Main code:
     for i in flag.verses.to_vec().iter() {
         println!("|{}|{}",format!("{}",i).bold(),"===========================================================".red());
-        print_data(i);
+        print_verse(i);
     }
         println!("{}","================================================================".red());
     
@@ -80,14 +81,17 @@ fn main() {
 
 
 #[tokio::main]
-pub async fn print_data(verse_index: &VerseIndex){
+pub async fn print_verse(verse_index: &VerseIndex){
     
     let sahih : VerseData = get_verse_data(verse_index,  20).await;
     let clear : VerseData = get_verse_data(verse_index, 131).await;
-    
-    print!("{:?}",get_translation_list().await);
     
     println!("Sahih International:\n{}\n{}\nDr.Mustafa Khattab, the Clear Quran:\n{}", sahih, "----------------------------------------------------------------".bright_black(),clear);
 }
 
 
+#[tokio::main]
+pub async fn print_translations(){
+    let translations = get_translation_list().await;
+    translations.iter().for_each(|x|println!("{}",x));
+}
