@@ -21,20 +21,7 @@ fn main() {
     // handle_ctrlc();
     // dbg!(OKK);//buildscript test
     // load config
-    let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
-    let cfg =
-        match cfg_result {
-            Ok (cfg_result) => cfg_result,
-            Err(cfg_result) => {
-                println!("{}", cfg_result);
-                Config::default()
-            }
-        };
-    dbg!(&cfg);
-    
-    confy::store("quran-ref", None, cfg).unwrap_or_default();
-    
-    
+    config();
     
     // fetch flags
     let args: Vec<String> = env::args().collect();
@@ -78,8 +65,23 @@ fn main() {
     
 }
 
-
-
+#[tokio::main]
+pub async fn config(){
+    let translation = get_translation_list().await;
+    let x = &translation[0];
+    let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
+    let mut cfg =
+        match cfg_result {
+            Ok (cfg_result) => cfg_result,
+            Err(cfg_result) => {
+                println!("{}", cfg_result);
+                Config::default()
+            }
+        };
+    cfg.translations.append(&mut vec![x.id]);
+    dbg!(&cfg);
+    confy::store("quran-ref", None, cfg).unwrap_or_default();
+}
 #[tokio::main]
 pub async fn print_verse(verse_index: &VerseIndex){
     

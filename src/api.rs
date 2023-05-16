@@ -74,7 +74,7 @@ pub async fn get_verse_data(verse_index: &VerseIndex, translation: u16) -> Verse
 }
 
 
-// TODO:
+// TODO: Translations
 
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Translations {
@@ -82,7 +82,7 @@ pub struct Translations {
 }
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Translation {
-    pub id: u32,
+    pub id: u16,
     pub name: String,
     pub author_name: String,
     pub slug: Option<String>,
