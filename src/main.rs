@@ -21,7 +21,7 @@ fn main() {
     // handle_ctrlc();
     // dbg!(OKK);//buildscript test
     // load config
-    config();
+    // config();
     
     // fetch flags
     let args: Vec<String> = env::args().collect();
@@ -79,6 +79,7 @@ pub async fn config(){
             }
         };
     cfg.translations.append(&mut vec![x.id]);
+    
     dbg!(&cfg);
     confy::store("quran-ref", None, cfg).unwrap_or_default();
 }
