@@ -58,7 +58,8 @@ fn main() {
         todo!("handle verses in reverse order");
     }
     // Main code:
-    for i in flag.verses.to_vec().iter() {
+    for i in flag.verses.to_vec().iter() { 
+        // TODO: FIX THE LINE SIZE DAMMIT
         println!("{:<5}|{}",format!("{}",i).bold(),"==========================================================".red());
         print_verse(i);
     }

@@ -114,3 +114,5 @@ pub async fn get_translation_list() -> Vec<Translation> {
     serde_json::from_str::<Translations>(&body).unwrap().translations
     // serde_json::from_str(&body).unwrap_or_default();
 }
+
+
