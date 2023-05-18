@@ -1,10 +1,10 @@
 use crate::*;
 
+// =====
+// Verse
+// =====
 
-// Structs
-
-
-
+// structs
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct TranslationText {
     pub id: u32,
@@ -62,8 +62,7 @@ pub struct Verse {
     pub translations: Vec<TranslationText>,
 }
 
-
-
+// functions
 pub async fn get_verse_data(verse_index: &VerseIndex, translation: u16) -> VerseData {
     let body = reqwest::get(format!("https://api.quran.com/api/v4/verses/by_key/{}?language=en&translations={}",verse_index, translation))
         .await.unwrap()
@@ -74,8 +73,12 @@ pub async fn get_verse_data(verse_index: &VerseIndex, translation: u16) -> Verse
 }
 
 
-// TODO: Translations
 
+// ============
+// Translations
+// ============
+
+// structs
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Translations {
     pub translations: Vec<Translation>,
@@ -100,6 +103,8 @@ impl std::fmt::Display for Translation {
         write!(w, "{0}.\t{1:<11}\t{2}",self.id, splitname[0].red(), self.translated_name.name.blue())
     }
 }
+
+// functions
 pub async fn get_translation_list() -> Vec<Translation> {
     let body = reqwest::get("https://api.quran.com/api/v4/resources/translations")
         .await.unwrap()
