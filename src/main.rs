@@ -16,12 +16,13 @@ use utils::*;
 use models::*;
 use api::*;
 
+#[allow(unused)]
 fn main() {
     // init
     // handle_ctrlc();
     // dbg!(OKK);//buildscript test
     // load config
-    // config();
+    let mut cfg = Config::load();
     
     // fetch flags
     let args: Vec<String> = env::args().collect();
@@ -65,8 +66,9 @@ fn main() {
     
 }
 
+
 #[tokio::main]
-pub async fn config(){
+pub async fn config_init(){
     let translation = get_translation_list().await;
     let x = &translation[0];
     let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
@@ -93,7 +95,7 @@ pub async fn print_verse(verse_index: &VerseIndex){
 }
 
 
-#[tokio::main]
+#[tokio::main] // actually this one featches translations not print em
 pub async fn print_translations(){
     let translations = get_translation_list().await;
     translations.iter().for_each(|x|println!("{}",x));

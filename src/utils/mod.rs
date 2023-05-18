@@ -1,10 +1,10 @@
 // extra utils
 pub mod flag_parser;
-pub mod edit;
+pub mod config;
 pub mod download;
 
 pub use flag_parser::*;
-pub use edit::*;
+pub use config::*;
 pub use download::*;
 
 

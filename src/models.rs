@@ -2,12 +2,6 @@ use std::fmt::Display;
 
 use crate::*;
 
-#[derive(Default, Debug, Serialize, Deserialize)]
-pub struct Config {
-    pub translations: Vec<u16>,
-    pub arabic : bool,
-}
-
 
 #[derive(Debug)]
 pub enum VerseErr{NotFound, Invalid, LimitExceeded, Empty}
