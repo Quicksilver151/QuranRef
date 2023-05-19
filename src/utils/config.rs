@@ -2,8 +2,7 @@ use crate::*;
 
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Config {
-    pub translations: Vec<u16>,
-    pub arabic : bool,
+    pub translations: Vec<Translation>,
 }
 impl Config {
     

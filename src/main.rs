@@ -23,6 +23,7 @@ fn main() {
     // dbg!(OKK);//buildscript test
     // load config
     let mut cfg = Config::load();
+    config_init();
     
     // fetch flags
     let args: Vec<String> = env::args().collect();
@@ -70,8 +71,9 @@ fn main() {
 
 #[tokio::main]
 pub async fn config_init(){
-    let translation = get_translation_list().await;
-    let x = &translation[0];
+    let translations : Vec<Translation> = get_translation_list().await;
+    let accepted = vec![20,131];
+    let mut translations: Vec<Translation> = translations.into_iter().filter(|x| accepted.contains(&x.id)).collect();
     let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
     let mut cfg =
         match cfg_result {
@@ -81,7 +83,7 @@ pub async fn config_init(){
                 Config::default()
             }
         };
-    cfg.translations.append(&mut vec![x.id]);
+    cfg.translations.append(&mut translations);
     
     dbg!(&cfg);
     confy::store("quran-ref", None, cfg).unwrap_or_default();
