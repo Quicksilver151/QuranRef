@@ -30,6 +30,7 @@ pub struct VerseData {
     pub verse: Verse,
 }
 impl std::fmt::Display for VerseData {
+    
     fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         
         let mut text = self.verse.translations[0].text.to_string();
@@ -69,7 +70,13 @@ pub async fn get_verse_data(verse_index: &VerseIndex, translation: u16) -> Verse
         .text()
         .await.unwrap();
     
-    serde_json::from_str(&body).unwrap_or_default()
+    match serde_json::from_str(&body){
+        Ok(verse_data) => verse_data,
+        Err(problem) => {
+            println!("Failed due to: {}\nselecting default values",problem);
+            VerseData::default()
+        }
+    }
 }
 
 
