@@ -86,7 +86,10 @@ pub async fn config_init(){
     cfg.translations.append(&mut translations);
     
     dbg!(&cfg);
-    confy::store("quran-ref", None, cfg).unwrap_or_default();
+    match confy::store("quran-ref", None, cfg) {
+        Ok(_)  => println!("Stored data successfully"),
+        Err(problem) => println!("Storing data failed due to {}", problem),
+    }
 }
 #[tokio::main]
 pub async fn print_verse(verse_index: &VerseIndex){

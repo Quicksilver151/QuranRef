@@ -73,7 +73,7 @@ pub async fn get_verse_data(verse_index: &VerseIndex, translation: u16) -> Verse
     match serde_json::from_str(&body){
         Ok(verse_data) => verse_data,
         Err(problem) => {
-            println!("Failed due to: {}\nselecting default values",problem);
+            println!("Failed due to: {}\nselecting default values", problem);
             VerseData::default()
         }
     }
@@ -113,10 +113,15 @@ impl std::fmt::Display for Translation {
 
 // functions
 pub async fn get_translation_list() -> Vec<Translation> {
-    let body = reqwest::get("https://api.quran.com/api/v4/resources/translations")
-        .await.unwrap()
-        .text()
-        .await.unwrap();
+    let data = match reqwest::get("https://api.quran.com/api/v4/resources/translations").await {
+        Ok(data) => data,
+        Err(_)  => panic!("no network connection"),
+    };
+    
+    let body = match data.text().await {
+            Ok(body) => body,
+            Err(problem) => panic!("failed to extract text: {}",problem),
+    };
     
     serde_json::from_str::<Translations>(&body).unwrap().translations
 }
