@@ -7,11 +7,12 @@ pub struct Config {
 impl Config {
     
     pub fn load() -> Config{
-        let load_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
+        let load_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", "config");
         match load_result {
             Ok (cfg) => cfg,
             Err(reason) => {
-                println!("{}", reason);
+                println!("Failed to load config due to: {}\nCreating new config with defaults", reason);
+                // confy::store("quran-ref", "conf", cfg)
                 Config::default()
             }
         }

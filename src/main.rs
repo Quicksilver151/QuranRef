@@ -23,7 +23,7 @@ fn main() {
     // dbg!(OKK);//buildscript test
     // load config
     let mut cfg = Config::load();
-    config_init();
+    // config_init(); //TODO: make it not need internet
     
     // fetch flags
     let args: Vec<String> = env::args().collect();
