@@ -103,6 +103,6 @@ pub async fn print_verse(verse_index: &VerseIndex){
 
 #[tokio::main] // actually this one featches translations not print em
 pub async fn print_translations(){
-    let translations = get_translation_list().await;
-    translations.iter().for_each(|x|println!("{}",x));
+    let translations: Vec<Translation> = get_translation_list().await;
+    translations.iter().for_each(|ts|println!("{}",ts));
 }

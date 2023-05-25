@@ -26,10 +26,12 @@ impl Config {
     }
 }
 
-// TODO:
+
+//  TODO:
 //  list translations()
-//     select translations()
-//     save translation ids(config.rs)/download complete translations(download.rs)
+//      select translations()
+//          sort translations() / filter translations()
+//      save translation ids(config.rs)/download complete translations(download.rs)
 //
 
 

@@ -87,8 +87,9 @@ pub async fn get_verse_data(verse_index: &VerseIndex, translation: u16) -> Verse
 
 // structs
 #[derive(Default, Debug, Serialize, Deserialize)]
-pub struct Translations {
-    pub translations: Vec<Translation>,
+pub struct TranslatedName {
+    pub name: String,
+    pub language_name: String,
 }
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Translation {
@@ -99,16 +100,16 @@ pub struct Translation {
     pub language_name: String,
     pub translated_name: TranslatedName,
 }
-#[derive(Default, Debug, Serialize, Deserialize)]
-pub struct TranslatedName {
-    pub name: String,
-    pub language_name: String,
-}
 impl std::fmt::Display for Translation {
     fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         let splitname:Vec<&str> = self.language_name.split(',').collect();
-        write!(w, "{0}.\t{1:<11}\t{2}",self.id, splitname[0].red(), self.translated_name.name.blue())
+        write!(w, "{0}.\t{1:<11}\t{2}", self.id.to_string().green(), splitname[0].red(), self.translated_name.name.blue())
     }
+}
+
+#[derive(Default, Debug, Serialize, Deserialize)]
+pub struct Translations {
+    pub translations: Vec<Translation>,
 }
 
 // functions
