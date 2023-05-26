@@ -4,7 +4,7 @@ use crate::*;
 
 
 #[derive(Debug)]
-pub enum VerseErr{NotFound, Invalid, LimitExceeded, Empty}
+pub enum VerseErr{Invalid}
 
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct VerseIndex {
