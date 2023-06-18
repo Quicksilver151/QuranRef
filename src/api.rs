@@ -81,26 +81,26 @@ pub async fn get_verse_data(verse_index: &VerseIndex, translation: u16) -> Verse
 
 
 
-// ============
-// Translations
-// ============
+// ====================
+// List ApiTranslations
+// ====================
 
 // structs
 #[derive(Default, Debug, Serialize, Deserialize)]
-pub struct TranslatedName {
+struct TranslatedName {
     pub name: String,
     pub language_name: String,
 }
 #[derive(Default, Debug, Serialize, Deserialize)]
-pub struct Translation {
-    pub id: u16,
-    pub name: String,
-    pub author_name: String,
-    pub slug: Option<String>,
-    pub language_name: String,
-    pub translated_name: TranslatedName,
+struct TranslationData {
+    id: u16,
+    name: String,
+    author_name: String,
+    slug: Option<String>,
+    language_name: String,
+    translated_name: TranslatedName,
 }
-impl std::fmt::Display for Translation {
+impl std::fmt::Display for TranslationData {
     fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         let splitname:Vec<&str> = self.language_name.split(',').collect();
         write!(w, "{0}.\t{1:<11}\t{2}", self.id.to_string().green(), splitname[0].red(), self.translated_name.name.blue())
@@ -108,12 +108,12 @@ impl std::fmt::Display for Translation {
 }
 
 #[derive(Default, Debug, Serialize, Deserialize)]
-pub struct Translations {
-    pub translations: Vec<Translation>,
+struct ApiTranslations {
+    pub translations: Vec<TranslationData>,
 }
 
 // functions
-pub async fn get_translation_list() -> Vec<Translation> {
+pub async fn get_translation_list() -> Vec<u16> {
     let data = match reqwest::get("https://api.quran.com/api/v4/resources/translations").await {
         Ok(data) => data,
         Err(_)  => panic!("no network connection"),
@@ -124,7 +124,21 @@ pub async fn get_translation_list() -> Vec<Translation> {
             Err(problem) => panic!("failed to extract text: {}",problem),
     };
     
-    serde_json::from_str::<Translations>(&body).unwrap().translations
+    let api_translations = serde_json::from_str::<ApiTranslations>(&body).unwrap().translations;
+    let translation_ids = api_translations.into_iter().map(|x| x.id).collect();
+    
+    translation_ids
+    
 }
+
+
+// =================
+// Full translations
+// =================
+
+
+
+
+
 
 

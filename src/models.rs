@@ -19,14 +19,8 @@ impl VerseIndex {
         VerseIndex { chapter: parse_num(chapter_index).unwrap(), verse: parse_num(verse_index).unwrap()}
         
     } 
-    pub fn from_range(index: &str, range: u16) -> VerseIndex {
-        let splits : Vec<&str> = index.split(':').collect();
-        let (chapter_index, verse_index) = (splits[0],splits[1]);
-        
-        VerseIndex { chapter: parse_num(chapter_index).unwrap(), verse:  parse_num(verse_index).unwrap().max(range)}
-        
-    } 
 }
+
 impl Display for VerseIndex {
     fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         write!(w, "{}:{}", self.chapter, self.verse)
@@ -76,6 +70,27 @@ impl VerseRange {
 pub fn parse_num(numstr: &str) -> Result<u16, VerseErr> {
     numstr.parse::<u16>().map_err(|_|VerseErr::Invalid)
 }
+
+// storage:
+
+pub struct Translation {
+    id: u16,
+    name: String,
+}
+pub struct Verse {
+    text: String,
+    verse_key: String,
+    tl_id : u16
+}
+pub struct Chapter {
+    verses: Vec<String>
+}
+pub struct Quran {
+    chapters: Vec<String>,
+    translation: Translation
+}
+
+
 
 
 

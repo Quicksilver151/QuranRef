@@ -18,6 +18,7 @@ use api::*;
 
 #[allow(unused)]
 fn main() {
+    //TODO: make api stuff private and actual usable data structs public
     // init
     // handle_ctrlc();
     // dbg!(OKK);//buildscript test
@@ -71,9 +72,9 @@ fn main() {
 
 #[tokio::main]
 pub async fn config_init(){
-    let translations : Vec<Translation> = get_translation_list().await;
+    let translations : Vec<u16> = get_translation_list().await;
     let accepted = vec![20,131];
-    let mut translations: Vec<Translation> = translations.into_iter().filter(|x| accepted.contains(&x.id)).collect();
+    let mut translation_ids: Vec<u16> = translations.into_iter().filter(|x| accepted.contains(x)).collect();// REWORK ALL Of DIS
     let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
     let mut cfg =
         match cfg_result {
@@ -83,7 +84,7 @@ pub async fn config_init(){
                 Config::default()
             }
         };
-    cfg.translations.append(&mut translations);
+    cfg.translations.append(&mut translation_ids);
     
     dbg!(&cfg);
     match confy::store("quran-ref", None, cfg) {
@@ -103,6 +104,6 @@ pub async fn print_verse(verse_index: &VerseIndex){
 
 #[tokio::main] // actually this one featches translations not print em
 pub async fn print_translations(){
-    let translations: Vec<Translation> = get_translation_list().await;
-    translations.iter().for_each(|ts|println!("{}",ts));
+    let tl_ids: Vec<u16> = get_translation_list().await;
+    tl_ids.iter().for_each(|tl_id|println!("{}",tl_id));
 }

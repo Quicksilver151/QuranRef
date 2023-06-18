@@ -36,7 +36,6 @@ pub fn save_to_data_dir(content: &str, filename: &str) -> std::io::Result<()> {
 
 
 // terminal screen functions
-#[allow(dead_code)]
 pub fn clear_screen() {
     print!("\x1B[2J");
     print!("\x1b[1;1H");
