@@ -1,12 +1,12 @@
 use crate::*;
 
 // TODO: fix to proper api data formats
-pub struct QuranTranslation {
-    pub chapters: Vec<Chapter>
-}
-pub struct Chapter{
-    pub verses: Vec<Verse>
-}
+// pub struct QuranTranslation {
+//     pub chapters: Vec<Chapter>
+// }
+// pub struct Chapter{
+    // pub verses: Vec<Verse>
+// }
 
 
 

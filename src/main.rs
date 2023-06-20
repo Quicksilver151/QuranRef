@@ -16,6 +16,7 @@ use utils::*;
 use models::*;
 use api::*;
 
+
 #[allow(unused)]
 fn main() {
     //TODO: make api stuff private and actual usable data structs public
@@ -94,7 +95,7 @@ pub async fn config_init(){
 }
 #[tokio::main]
 pub async fn print_verse(verse_index: &VerseIndex){
-    
+
     let sahih : VerseData = get_verse_data(verse_index,  20).await;
     let clear : VerseData = get_verse_data(verse_index, 131).await;
     
@@ -107,3 +108,14 @@ pub async fn print_translations(){
     let tl_ids: Vec<u16> = get_translation_list().await;
     tl_ids.iter().for_each(|tl_id|println!("{}",tl_id));
 }
+
+
+
+pub async fn download_quran(translation: Translation)-> Quran {
+    
+    fetch_quran(translation).await
+    
+    
+}
+
+

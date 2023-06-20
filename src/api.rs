@@ -24,6 +24,19 @@ fn remove_section(s: &str, start: usize, end: usize) -> String {
     result.push_str(&s[end..]);
     result
 }
+fn remove_sup_tag(text:String) -> String {
+    let mut text = text;
+    let mut failsafe = 50;
+    loop{
+        match text.find("<sup"){
+            Some(found) => text = remove_section(&text, found, text.find("</sup>").unwrap_or(found)+6),
+            None => break,
+        };
+        failsafe -= 1;
+        if failsafe < 0{break}
+    }
+    text
+}
 
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct VerseData {
@@ -33,16 +46,8 @@ impl std::fmt::Display for VerseData {
     
     fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         
-        let mut text = self.verse.translations[0].text.to_string();
-        let mut failsafe = 50;
-        loop{
-            match text.find("<sup"){
-                Some(found) => text = remove_section(&text, found, text.find("</sup>").unwrap_or(found)+6),
-                None => break,
-            };
-            failsafe -= 1;
-            if failsafe < 0{break}
-        }
+        let text = self.verse.translations[0].text.to_string();
+        let text = remove_sup_tag(text);
         let wraped_text = textwrap::fill(&text, 64);
         write!(w, "{}", wraped_text.blue())
     }
@@ -124,10 +129,11 @@ pub async fn get_translation_list() -> Vec<u16> {
             Err(problem) => panic!("failed to extract text: {}",problem),
     };
     
-    let api_translations = serde_json::from_str::<ApiTranslations>(&body).unwrap().translations;
-    let translation_ids = api_translations.into_iter().map(|x| x.id).collect();
     
-    translation_ids
+    let api_translations = serde_json::from_str::<ApiTranslations>(&body).unwrap().translations;
+    
+    api_translations.into_iter().map(|x| x.id).collect()
+    
     
 }
 
@@ -137,6 +143,69 @@ pub async fn get_translation_list() -> Vec<u16> {
 // =================
 
 
+pub async fn fetch_chapter(translation: &Translation, chapter_number: u16) -> Chapter{
+    
+    #[derive(Default, Debug, Serialize, Deserialize)]
+    struct Filters {
+        resource_id: u16,
+        chapter_number: String
+    }
+    
+    #[derive(Default, Debug, Serialize, Deserialize)]
+    struct ChapterMeta {
+        translation_name : String,
+        author_name : String,
+    }
+    
+    #[derive(Default, Debug, Serialize, Deserialize)]
+    struct Translation {
+        resource_id: u16,
+        text: String,
+    }
+    
+    #[derive(Default, Debug, Serialize, Deserialize)]
+    struct ApiChapter {
+        translations: Vec<Translation>,
+        meta : ChapterMeta
+    }
+    
+    
+    let url = format!("https://api.quran.com/api/v4/quran/translations/{}?chapter_number={}", translation.id, chapter_number);
+    let data = match reqwest::get(url).await {
+        Ok(data) => data,
+        Err(_)  => panic!("no network connection"),
+    };
+    
+    let body = match data.text().await {
+            Ok(body) => body,
+            Err(problem) => panic!("failed to extract text: {}",problem),
+    };
+    
+    
+    let chapter = serde_json::from_str::<ApiChapter>(&body).unwrap().translations;
+    
+    let verses: Vec<String> = chapter.into_iter().map(|x| x.text).collect();
+    
+    let verses = verses.into_iter().map(remove_sup_tag).collect();
+    
+    Chapter { verses }
+}
+
+pub async fn fetch_quran(translation: Translation) -> Quran {
+    
+    let mut quran = Quran::default();
+    
+    
+    for i in 1..115 {
+        dbg!(&i);
+        let chapter = fetch_chapter(&translation, i).await;
+        quran.chapters.append(&mut vec![chapter])
+    }
+    
+    quran.translation = translation;
+    quran
+    
+}
 
 
 

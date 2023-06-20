@@ -73,21 +73,25 @@ pub fn parse_num(numstr: &str) -> Result<u16, VerseErr> {
 
 // storage:
 
+#[derive(Debug, Default)]
 pub struct Translation {
-    id: u16,
-    name: String,
+    pub id: u16,
+    pub name: String,
 }
+#[derive(Debug, Default)]
 pub struct Verse {
-    text: String,
-    verse_key: String,
-    tl_id : u16
+    pub text: String,
+    pub verse_key: String,
+    pub tl_id : u16
 }
+#[derive(Debug, Default)]
 pub struct Chapter {
-    verses: Vec<String>
+    pub verses: Vec<String>
 }
+#[derive(Debug, Default)]
 pub struct Quran {
-    chapters: Vec<String>,
-    translation: Translation
+    pub chapters: Vec<Chapter>,
+    pub translation: Translation
 }
 
 
