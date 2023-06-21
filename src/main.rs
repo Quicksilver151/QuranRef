@@ -45,7 +45,9 @@ fn main() {
         return;
     }
     if flag.edit {
-        print_translations();
+        let quran = download_quran(Translation { id: 131, name: String::from("Dr.Mustafa Khattab, the Clear Quran") });
+        save_quran_data(quran);
+        // print_translations();
         return;
     } 
     if flag.arabic {
@@ -110,7 +112,7 @@ pub async fn print_translations(){
 }
 
 
-
+#[tokio::main]
 pub async fn download_quran(translation: Translation)-> Quran {
     
     fetch_quran(translation).await
