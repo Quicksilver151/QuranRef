@@ -45,9 +45,9 @@ fn main() {
         return;
     }
     if flag.edit {
-        let quran = download_quran(Translation { id: 131, name: String::from("Dr.Mustafa Khattab, the Clear Quran") });
-        save_quran_data(quran);
-        // print_translations();
+        // let quran = download_quran(Translation { id: 86, name: String::from("Dhivehi") });
+        // save_quran_data(quran);
+        print_translations();
         return;
     } 
     if flag.arabic {
@@ -68,16 +68,16 @@ fn main() {
         println!("{:<5}|{}",format!("{}",i).bold(),"==========================================================".red());
         print_verse(i);
     }
-        println!("{}","================================================================".red());
+    println!("{}","================================================================".red());
     
 }
 
 
 #[tokio::main]
 pub async fn config_init(){
-    let translations : Vec<u16> = get_translation_list().await;
+    let translations : Vec<(String, u16)> = get_translation_list().await;
     let accepted = vec![20,131];
-    let mut translation_ids: Vec<u16> = translations.into_iter().filter(|x| accepted.contains(x)).collect();// REWORK ALL Of DIS
+    let mut translation_ids: Vec<(String, u16)> = translations.into_iter().filter(|x| accepted.contains(&x.1)).collect();// REWORK ALL Of DIS
     let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
     let mut cfg =
         match cfg_result {
@@ -107,8 +107,8 @@ pub async fn print_verse(verse_index: &VerseIndex){
 
 #[tokio::main] // actually this one featches translations not print em
 pub async fn print_translations(){
-    let tl_ids: Vec<u16> = get_translation_list().await;
-    tl_ids.iter().for_each(|tl_id|println!("{}",tl_id));
+    let tl: Vec<(String, u16)> = get_translation_list().await;
+    tl.iter().for_each(|tl|println!("{}\t{}",tl.1, tl.0));
 }
 
 

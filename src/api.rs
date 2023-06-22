@@ -118,7 +118,7 @@ struct ApiTranslations {
 }
 
 // functions
-pub async fn get_translation_list() -> Vec<u16> {
+pub async fn get_translation_list() -> Vec<(String,u16)> {
     let data = match reqwest::get("https://api.quran.com/api/v4/resources/translations").await {
         Ok(data) => data,
         Err(_)  => panic!("no network connection"),
@@ -132,7 +132,7 @@ pub async fn get_translation_list() -> Vec<u16> {
     
     let api_translations = serde_json::from_str::<ApiTranslations>(&body).unwrap().translations;
     
-    api_translations.into_iter().map(|x| x.id).collect()
+    api_translations.into_iter().map(|x| (x.name, x.id)).collect()
     
     
 }
