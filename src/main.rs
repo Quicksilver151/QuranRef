@@ -47,7 +47,8 @@ fn main() {
     if flag.edit {
         // let quran = download_quran(Translation { id: 86, name: String::from("Dhivehi") });
         // save_quran_data(quran);
-        print_translations();
+        // print_translations();
+        edit();
         return;
     } 
     if flag.arabic {
@@ -110,7 +111,10 @@ pub async fn print_translations(){
     let tl: Vec<(String, u16)> = get_translation_list().await;
     tl.iter().for_each(|tl|println!("{}\t{}",tl.1, tl.0));
 }
-
+#[tokio::main] // actually this one featches translations not print em
+pub async fn get_translations() -> Vec<(String, u16)>{
+    get_translation_list().await
+}
 
 #[tokio::main]
 pub async fn download_quran(translation: Translation)-> Quran {

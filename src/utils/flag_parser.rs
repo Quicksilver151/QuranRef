@@ -28,7 +28,6 @@ OPTIONS:
     -h, --help          shows this help section
     -e, --edit          configure the program
     -a, --arabic        includes the arabic part
- 
 EXAMPLES: 
 $ quran-ref 21:12
 
