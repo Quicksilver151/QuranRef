@@ -9,7 +9,6 @@ pub use colored::*;
 mod utils;
 mod models;
 mod api;
-// include!(concat!(env!("OUT_DIR"), "/db.rs"));
 
 // use files
 use utils::*;
@@ -19,14 +18,9 @@ use api::*;
 
 #[allow(unused)]
 fn main() {
-    //TODO: make api stuff private and actual usable data structs public
     // init
-    // handle_ctrlc();
-    // dbg!(OKK);//buildscript test
     // load config
-    println!("{}",download_quran(Translation { id: 131, name: "testing".to_owned() }));
     let mut cfg = Config::load();
-    // config_init(); //TODO: make it not need internet
     
     // fetch flags
     let args: Vec<String> = env::args().collect();
@@ -36,8 +30,6 @@ fn main() {
     };
     
     dbg!(&flag);
-    // println!("VERSEEE=");
-    // flag.verses.to_vec().iter().for_each(|x| println!("{}",x));
     
     
     // branch flags
@@ -46,7 +38,7 @@ fn main() {
         return;
     }
     if flag.edit {
-        edit();
+        edit(&mut cfg);
         return;
     } 
     if flag.arabic {
@@ -62,6 +54,13 @@ fn main() {
         todo!("handle verses in reverse order");
     }
     // Main code:
+    let translation: Translation = Translation { id: 131, name: "Dr. Mustafa Khattab, the Clear Quran".to_string() };
+    if cfg.translations.contains(&translation){
+        print!("okk")
+    }
+    else{
+        print!("noooo{:?}",cfg.translations)
+    }
     for i in flag.verses.to_vec().iter() { 
         // TODO: FIX THE LINE SIZE DAMMIT
         println!("{:<5}|{}",format!("{}",i).bold(),"==========================================================".red());
@@ -70,15 +69,17 @@ fn main() {
     println!("{}","================================================================".red());
     
 }
+pub fn print_verses(verse_range: &VerseRange, translation: &Translation) {
 
+}
 
 
 
 #[tokio::main]
 pub async fn config_init(){
-    let translations : Vec<(String, u16)> = get_translation_list().await;
+    let translations : Vec<Translation> = get_translation_list().await;
     let accepted = vec![20,131];
-    let mut translation_ids: Vec<(String, u16)> = translations.into_iter().filter(|x| accepted.contains(&x.1)).collect();// REWORK ALL Of DIS
+    let mut translation_ids: Vec<Translation> = translations.into_iter().filter(|x| accepted.contains(&x.id)).collect();// REWORK ALL Of DIS
     let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
     let mut cfg =
         match cfg_result {
@@ -108,16 +109,16 @@ pub async fn print_verse(verse_index: &VerseIndex){
 
 #[tokio::main] // actually this one featches translations not print em
 pub async fn print_translations(){
-    let tl: Vec<(String, u16)> = get_translation_list().await;
-    tl.iter().for_each(|tl|println!("{}\t{}",tl.1, tl.0));
+    let tl: Vec<Translation> = get_translation_list().await;
+    tl.iter().for_each(|tl|println!("{}\t{}",tl.id, tl.name));
 }
 #[tokio::main] // actually this one featches translations not print em
-pub async fn get_translations() -> Vec<(String, u16)>{
+pub async fn get_translations() -> Vec<Translation>{
     get_translation_list().await
 }
 
 #[tokio::main]
-pub async fn download_quran(translation: Translation)-> Quran {
+pub async fn download_quran(translation: &Translation)-> Quran {
     
     fetch_quran(translation).await
     

@@ -73,7 +73,7 @@ pub fn parse_num(numstr: &str) -> Result<u16, VerseErr> {
 
 // tl:
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize, PartialEq, PartialOrd)]
 pub struct Translation {
     pub id: u16,
     pub name: String,

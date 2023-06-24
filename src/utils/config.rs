@@ -2,7 +2,8 @@ use crate::*;
 
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Config {
-    pub translations: Vec<(String, u16)>,
+    pub current_tl: Translation,
+    pub translations: Vec<Translation>,
 }
 impl Config {
     
@@ -19,11 +20,16 @@ impl Config {
     }
     
     pub fn save(&self){
-        match confy::store("quran-ref", None, self) {
+        match confy::store("quran-ref", "config", self) {
             Ok(_) => println!("Saved config successfully!"),
             Err(reason) => println!("Err: saving failed due to: {}", reason),
         }
     }
+    
+    pub fn add_translation(&mut self, new_tl: Translation){
+        self.translations.append(&mut vec![new_tl])
+    }
+    
 }
 
 

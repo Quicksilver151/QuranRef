@@ -118,7 +118,7 @@ struct ApiTranslations {
 }
 
 // functions
-pub async fn get_translation_list() -> Vec<(String,u16)> {
+pub async fn get_translation_list() -> Vec<Translation> {
     let data = match reqwest::get("https://api.quran.com/api/v4/resources/translations").await {
         Ok(data) => data,
         Err(_)  => panic!("no network connection"),
@@ -132,7 +132,7 @@ pub async fn get_translation_list() -> Vec<(String,u16)> {
     
     let api_translations = serde_json::from_str::<ApiTranslations>(&body).unwrap().translations;
     
-    api_translations.into_iter().map(|x| (x.name, x.id)).collect()
+    api_translations.into_iter().map(|x| Translation{name: x.name, id: x.id}).collect()
     
     
 }
@@ -193,18 +193,18 @@ pub async fn fetch_chapter(translation: &Translation, chapter_number: u16) -> Ve
     
 }
 
-pub async fn fetch_quran(translation: Translation) -> Quran {
+pub async fn fetch_quran(translation: &Translation) -> Quran {
     
     let mut quran = Quran::default();
     
     
-    for juz in 1..115 {
+    for juz in 111..115 {
         dbg!(&juz);
-        let chapter = fetch_chapter(&translation, juz).await;
+        let chapter = fetch_chapter(translation, juz).await;
         quran.chapters.append(&mut vec![chapter])
     }
     
-    quran.translation = translation;
+    quran.translation = Translation{id:translation.id.clone(), name:translation.name.clone()};
     quran
     
 }
