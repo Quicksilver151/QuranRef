@@ -24,6 +24,7 @@ fn main() {
     // handle_ctrlc();
     // dbg!(OKK);//buildscript test
     // load config
+    println!("{}",download_quran(Translation { id: 131, name: "testing".to_owned() }));
     let mut cfg = Config::load();
     // config_init(); //TODO: make it not need internet
     
@@ -45,9 +46,6 @@ fn main() {
         return;
     }
     if flag.edit {
-        // let quran = download_quran(Translation { id: 86, name: String::from("Dhivehi") });
-        // save_quran_data(quran);
-        // print_translations();
         edit();
         return;
     } 
@@ -72,6 +70,8 @@ fn main() {
     println!("{}","================================================================".red());
     
 }
+
+
 
 
 #[tokio::main]

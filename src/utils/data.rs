@@ -19,7 +19,7 @@ pub fn save_translation(content:&str, translation_name:&str){
 }
 
 pub fn save_quran_data(quran: Quran) {
-    match save_to_data_dir(&format!("{:?}",quran), &quran.translation.name) {
+    match save_to_data_dir(&format!("{}",quran), &quran.translation.name) {
         Ok(()) => println!("Translation downloaded successfully."),
         Err(err) => eprintln!("Error saving download: {}", err),
     }  

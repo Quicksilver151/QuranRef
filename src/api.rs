@@ -143,8 +143,10 @@ pub async fn get_translation_list() -> Vec<(String,u16)> {
 // =================
 
 
-pub async fn fetch_chapter(translation: &Translation, chapter_number: u16) -> Chapter{
+pub async fn fetch_chapter(translation: &Translation, chapter_number: u16) -> Vec<String> {
     
+    
+    // api structs:
     #[derive(Default, Debug, Serialize, Deserialize)]
     struct Filters {
         resource_id: u16,
@@ -184,11 +186,11 @@ pub async fn fetch_chapter(translation: &Translation, chapter_number: u16) -> Ch
     
     let chapter = serde_json::from_str::<ApiChapter>(&body).unwrap().translations;
     
-    let verses: Vec<String> = chapter.into_iter().map(|x| x.text).collect();
+    let mut verses: Vec<String> = vec![chapter_number.to_string()];
+    verses.append(&mut chapter.into_iter().map(|x| x.text).collect());
     
-    let verses = verses.into_iter().map(remove_sup_tag).collect();
+    verses.into_iter().map(remove_sup_tag).collect()
     
-    Chapter { verses }
 }
 
 pub async fn fetch_quran(translation: Translation) -> Quran {

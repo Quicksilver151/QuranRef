@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use std::fmt::{Display, write};
 
 use crate::*;
 
@@ -71,27 +71,35 @@ pub fn parse_num(numstr: &str) -> Result<u16, VerseErr> {
     numstr.parse::<u16>().map_err(|_|VerseErr::Invalid)
 }
 
-// storage:
+// tl:
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Translation {
     pub id: u16,
     pub name: String,
 }
+
+// quran data
+
 #[derive(Debug, Default)]
 pub struct Verse {
     pub text: String,
-    pub verse_key: String,
     pub tl_id : u16
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Chapter {
     pub verses: Vec<String>
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Quran {
-    pub chapters: Vec<Chapter>,
+    pub chapters: Vec<Vec<String>>,
     pub translation: Translation
+}
+impl Display for Quran {
+    fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        let quran_json = serde_json::to_string_pretty(self).unwrap();
+        write!(w, "{}", quran_json)
+    }
 }
 
 
