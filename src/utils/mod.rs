@@ -9,10 +9,9 @@ pub use config::*;
 pub use data::*;
 pub use edit::*;
 
-// utils
+pub use crate::*;
 
 // save data
-use directories::ProjectDirs;
 use std::{fs,io};
 use fs::File;
 use io::Write;

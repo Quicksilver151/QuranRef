@@ -81,15 +81,6 @@ pub struct Translation {
 
 // quran data
 
-#[derive(Debug, Default)]
-pub struct Verse {
-    pub text: String,
-    pub tl_id : u16
-}
-#[derive(Debug, Default, Serialize, Deserialize)]
-pub struct Chapter {
-    pub verses: Vec<String>
-}
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Quran {
     pub chapters: Vec<Vec<String>>,

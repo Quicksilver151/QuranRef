@@ -4,6 +4,7 @@ use std::env;
 // crates
 pub use serde::{Serialize, Deserialize};
 pub use colored::*;
+pub use directories::*;
 
 // include files
 mod utils;
@@ -19,7 +20,8 @@ use api::*;
 #[allow(unused)]
 fn main() {
     // init
-    // load config
+    // load config & data
+    let downloaded_tls = list_downloaded_translations();
     let mut cfg = Config::load();
     
     // fetch flags
@@ -53,13 +55,16 @@ fn main() {
     }else{
         todo!("handle verses in reverse order");
     }
-    // Main code:
+    //Main code:
+    //  if .local has cfg selected translation:
+    //      fetch local
+    //  else:
+    //      fetch online
+
     let translation: Translation = Translation { id: 131, name: "Dr. Mustafa Khattab, the Clear Quran".to_string() };
-    if cfg.translations.contains(&translation){
-        print!("okk")
-    }
-    else{
-        print!("noooo{:?}",cfg.translations)
+    if downloaded_tls.contains(&cfg.current_tl){
+        todo!("fetch local");
+        return
     }
     for i in flag.verses.to_vec().iter() { 
         // TODO: FIX THE LINE SIZE DAMMIT
@@ -69,6 +74,7 @@ fn main() {
     println!("{}","================================================================".red());
     
 }
+
 pub fn print_verses(verse_range: &VerseRange, translation: &Translation) {
 
 }
