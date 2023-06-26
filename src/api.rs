@@ -198,7 +198,7 @@ pub async fn fetch_quran(translation: &Translation) -> Quran {
     let mut quran = Quran::default();
     
     
-    for juz in 111..115 {
+    for juz in 1..115 {
         dbg!(&juz);
         let chapter = fetch_chapter(translation, juz).await;
         quran.chapters.append(&mut vec![chapter])

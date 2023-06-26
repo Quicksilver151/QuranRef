@@ -86,6 +86,21 @@ pub struct Quran {
     pub chapters: Vec<Vec<String>>,
     pub translation: Translation
 }
+impl Quran {
+    pub fn fetch_verses(&self, verse_range: &VerseRange) -> Vec<String>{
+        let chapter = verse_range.index.chapter as usize;
+        let start_verse = verse_range.index.verse as usize;
+        let end_verse = verse_range.endex.verse as usize;
+        
+        let mut verses: Vec<String> = vec![];
+        for i in start_verse..end_verse {
+            let verse_text = self.chapters[chapter][i].to_owned();
+            verses.append(&mut vec![verse_text])
+        }
+        
+        verses
+    }
+}
 impl Display for Quran {
     fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         let quran_json = serde_json::to_string_pretty(self).unwrap();

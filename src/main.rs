@@ -62,7 +62,8 @@ fn main() {
     //      fetch online (done!)
     dbg!(&downloaded_tls, &cfg.current_tl);
     if downloaded_tls.contains(&cfg.current_tl){
-        print_verses(&flag.verses, &cfg.current_tl);
+        let quran = load_downloaded_translation(&cfg.current_tl);
+        show_verses(&quran, &flag.verses);
         return
     }
     for index in flag.verses.to_vec().iter() { 
@@ -74,9 +75,13 @@ fn main() {
     
 }
 
-pub fn print_verses(verse_range: &VerseRange, translation: &Translation) {
+pub fn show_verses(quran: &Quran, verse_range: &VerseRange) {
     
-    let quran = load_downloaded_translation(translation);
+    let verses = quran.fetch_verses(verse_range);
+    for verse in verses {
+        println!("{}",verse);
+    }
+    
     
 }
 
