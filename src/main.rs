@@ -59,24 +59,25 @@ fn main() {
     //  if .local has cfg selected translation:
     //      fetch local
     //  else:
-    //      fetch online
-
-    let translation: Translation = Translation { id: 131, name: "Dr. Mustafa Khattab, the Clear Quran".to_string() };
+    //      fetch online (done!)
+    dbg!(&downloaded_tls, &cfg.current_tl);
     if downloaded_tls.contains(&cfg.current_tl){
-        todo!("fetch local");
+        print_verses(&flag.verses, &cfg.current_tl);
         return
     }
-    for i in flag.verses.to_vec().iter() { 
+    for index in flag.verses.to_vec().iter() { 
         // TODO: FIX THE LINE SIZE DAMMIT
-        println!("{:<5}|{}",format!("{}",i).bold(),"==========================================================".red());
-        print_verse(i);
+        println!("{:<5}|{}",format!("{}",index).bold(),"==========================================================".red());
+        print_verse(index);
     }
     println!("{}","================================================================".red());
     
 }
 
 pub fn print_verses(verse_range: &VerseRange, translation: &Translation) {
-
+    
+    let quran = load_downloaded_translation(translation);
+    
 }
 
 
