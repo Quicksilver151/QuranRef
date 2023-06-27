@@ -73,29 +73,49 @@ pub fn parse_num(numstr: &str) -> Result<u16, VerseErr> {
 
 // tl:
 
-#[derive(Debug, Default, Serialize, Deserialize, PartialEq, PartialOrd)]
+#[derive(Debug, Default, Serialize, Deserialize, PartialEq, PartialOrd, Clone)]
 pub struct Translation {
     pub id: u16,
     pub name: String,
 }
 
 // quran data
-
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct Verse {
+    pub text: String,
+    pub index: VerseIndex,
+    pub tl: Translation,
+}
+impl Display for Verse {
+    fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        let verse = &self.text;
+        let index = format!("{}",&self.index).bold().on_black();
+        let tl = &self.tl.name;
+        let mut text = format!("|{:<4}|{}\n{}:\n", index , "===============================================".red(), tl);
+        text += &format!("{}",verse.blue());
+        text += &format!("{}","\n=====================================================".red());
+        writeln!(w, "{}", text)
+        
+    }
+}
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Quran {
     pub chapters: Vec<Vec<String>>,
     pub translation: Translation
 }
 impl Quran {
-    pub fn fetch_verses(&self, verse_range: &VerseRange) -> Vec<String>{
+    pub fn fetch_verses(&self, verse_range: &VerseRange) -> Vec<Verse>{
         let chapter = verse_range.index.chapter as usize;
         let start_verse = verse_range.index.verse as usize;
         let end_verse = verse_range.endex.verse as usize;
         
-        let mut verses: Vec<String> = vec![];
+        let mut verses: Vec<Verse> = vec![];
         for i in start_verse..end_verse {
-            let verse_text = self.chapters[chapter][i].to_owned();
-            verses.append(&mut vec![verse_text])
+            let text = self.chapters[chapter][i].to_owned();
+            let index = VerseIndex {chapter: chapter as u16, verse:i as u16};
+            let tl = self.translation.clone();
+            let verse : Verse = Verse {text, index, tl};
+            verses.append(&mut vec![verse]);
         }
         
         verses
