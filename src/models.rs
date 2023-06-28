@@ -88,13 +88,26 @@ pub struct Verse {
 }
 impl Display for Verse {
     fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-        let verse = &self.text;
+        let verse = textwrap::fill(&self.text, 64);
         let index = format!("{}",&self.index).bold().on_black();
         let tl = &self.tl.name;
-        let mut text = format!("|{:<4}|{}\n{}:\n", index , "===============================================".red(), tl);
+        let index_len = index.chars().count();
+        
+        let mut text = {
+            match index_len {
+                3 => format!("|{:<3}|{}\n", index , "=============================================================".red()),
+                4 => format!("|{:<4}|{}\n", index , "============================================================".red()),
+                5 => format!("|{:<5}|{}\n", index , "===========================================================".red()),
+                6 => format!("|{:<6}|{}\n", index , "==========================================================".red()),
+                7 => format!("|{:<7}|{}\n", index , "=========================================================".red()),
+                _ => "".to_owned()
+            }
+        };
+        
+        text += &format!("{}\n",tl);
         text += &format!("{}",verse.blue());
-        text += &format!("{}","\n=====================================================".red());
-        writeln!(w, "{}", text)
+        // text += &format!("{}","\n==================================================================".red());
+        write!(w, "{}", text)
         
     }
 }
@@ -107,7 +120,11 @@ impl Quran {
     pub fn fetch_verses(&self, verse_range: &VerseRange) -> Vec<Verse>{
         let chapter = verse_range.index.chapter as usize;
         let start_verse = verse_range.index.verse as usize;
-        let end_verse = verse_range.endex.verse as usize;
+        let end_verse = {
+            let raw_verse = verse_range.endex.verse as usize + 1;
+            let chapter_length = self.chapters[chapter].len();
+            raw_verse.min(chapter_length)
+        };
         
         let mut verses: Vec<Verse> = vec![];
         for i in start_verse..end_verse {
