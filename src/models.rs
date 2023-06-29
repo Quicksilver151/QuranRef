@@ -1,4 +1,4 @@
-use std::fmt::{Display, write};
+use std::fmt::{Display, write, format};
 
 use crate::*;
 
@@ -92,17 +92,10 @@ impl Display for Verse {
         let index = format!("{}",&self.index).bold().on_black();
         let tl = &self.tl.name;
         let index_len = index.chars().count();
-        
-        let mut text = {
-            match index_len {
-                3 => format!("|{:<3}|{}\n", index , "=============================================================".red()),
-                4 => format!("|{:<4}|{}\n", index , "============================================================".red()),
-                5 => format!("|{:<5}|{}\n", index , "===========================================================".red()),
-                6 => format!("|{:<6}|{}\n", index , "==========================================================".red()),
-                7 => format!("|{:<7}|{}\n", index , "=========================================================".red()),
-                _ => "".to_owned()
-            }
-        };
+        let equal_len = 64 - index_len;
+        let eq_string = "=".repeat(equal_len);
+
+        let mut text = format!("|{}|{}\n", index, eq_string.red());
         
         text += &format!("{}\n",tl);
         text += &format!("{}",verse.blue());
