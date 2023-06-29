@@ -21,7 +21,7 @@ use api::*;
 fn main() {
     // init
     // load config & data
-    let downloaded_tls = list_downloaded_translations();
+    let downloaded_tls = get_downloaded_translations_list();
     let mut cfg = Config::load();
     
     // fetch flags
@@ -41,6 +41,11 @@ fn main() {
     }
     if flag.edit {
         edit(&mut cfg);
+        return;
+    }
+    if flag.download {
+        download_translation();
+        println!("Download complete");
         return;
     } 
     if flag.arabic {
@@ -86,29 +91,29 @@ pub fn show_verses(quran: &Quran, verse_range: &VerseRange) {
 }
 
 
-
-#[tokio::main]
-pub async fn config_init(){
-    let translations : Vec<Translation> = get_translation_list().await;
-    let accepted = vec![20,131];
-    let mut translation_ids: Vec<Translation> = translations.into_iter().filter(|x| accepted.contains(&x.id)).collect();// REWORK ALL Of DIS
-    let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
-    let mut cfg =
-        match cfg_result {
-            Ok (cfg_result) => cfg_result,
-            Err(cfg_result) => {
-                println!("{}", cfg_result);
-                Config::default()
-            }
-        };
-    cfg.translations.append(&mut translation_ids);
-    
-    dbg!(&cfg);
-    match confy::store("quran-ref", None, cfg) {
-        Ok(_)  => println!("Stored data successfully"),
-        Err(problem) => println!("Storing data failed due to {}", problem),
-    }
-}
+//
+// #[tokio::main]
+// pub async fn config_init(){
+//     let translations : Vec<Translation> = get_translation_list();
+//     let accepted = vec![20,131];
+//     let mut translation_ids: Vec<Translation> = translations.into_iter().filter(|x| accepted.contains(&x.id)).collect();// REWORK ALL Of DIS
+//     let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
+//     let mut cfg =
+//         match cfg_result {
+//             Ok (cfg_result) => cfg_result,
+//             Err(cfg_result) => {
+//                 println!("{}", cfg_result);
+//                 Config::default()
+//             }
+//         };
+//     cfg.translations.append(&mut translation_ids);
+//     
+//     dbg!(&cfg);
+//     match confy::store("quran-ref", None, cfg) {
+//         Ok(_)  => println!("Stored data successfully"),
+//         Err(problem) => println!("Storing data failed due to {}", problem),
+//     }
+// }
 #[tokio::main]
 pub async fn print_verse(verse_index: &VerseIndex){
 
@@ -118,16 +123,6 @@ pub async fn print_verse(verse_index: &VerseIndex){
     println!("Sahih International:\n{}\n{}\nDr.Mustafa Khattab, the Clear Quran:\n{}", sahih, "----------------------------------------------------------------".bright_black(),clear);
 }
 
-
-#[tokio::main] // actually this one featches translations not print em
-pub async fn print_translations(){
-    let tl: Vec<Translation> = get_translation_list().await;
-    tl.iter().for_each(|tl|println!("{}\t{}",tl.id, tl.name));
-}
-#[tokio::main] // actually this one featches translations not print em
-pub async fn get_translations() -> Vec<Translation>{
-    get_translation_list().await
-}
 
 #[tokio::main]
 pub async fn download_quran(translation: &Translation)-> Quran {

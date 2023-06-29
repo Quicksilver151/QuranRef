@@ -3,7 +3,7 @@ use crate::*;
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Config {
     pub current_tl: Translation,
-    pub translations: Vec<Translation>,
+    pub selected_tls: Vec<Translation>,
 }
 impl Config {
     
@@ -24,10 +24,6 @@ impl Config {
             Ok(_) => println!("Saved config successfully!"),
             Err(reason) => println!("Err: saving failed due to: {}", reason),
         }
-    }
-    
-    pub fn add_translation(&mut self, new_tl: Translation){
-        self.translations.append(&mut vec![new_tl])
     }
     
 }

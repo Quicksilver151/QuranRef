@@ -3,39 +3,27 @@ use crate::*;
 
 
 pub fn edit(cfg: &mut Config) {
-    println!("select a translation index to download");
-    println!("======================================");
+    println!("Select downloaded translations by their number");
+    println!("==============================================");
     
-    let tl: Vec<Translation> = get_translations();
-    tl.iter().for_each(|tl|println!("{}\t{}",tl.id, tl.name));
+    let tls: Vec<Translation> = get_downloaded_translations_list();
     
-    println!("input a number: ");
-    let number = get_number_input().unwrap();
-    let mut tl_name = "unkown".to_owned();
-    for i in tl {
-        if i.id == number {
-            tl_name = i.name;
-            break;
+    tls.iter().for_each(|tl|println!("{}\t{}",tl.id, tl.name));
+    
+    println!("input comma separated numbers: [eg: 20,131,270]");
+    let numbers = get_number_list_input().unwrap();
+    let mut selected_tls: Vec<Translation> = vec![];
+
+    for number in numbers {
+        for tl in tls.iter(){
+            if tl.is_id(&number){
+                selected_tls.append(&mut vec![tl.clone()]);
+            }
         }
     }
-
-    let selected_tl = Translation { id: number, name: tl_name };
-    let quran = download_quran(&selected_tl);
-    save_quran_data(quran);
     
-    // TODO: move selection or download to a separate flag
-    // cfg.current_tl = selected_tl;
-    // dbg!(&cfg);
-    // cfg.save();
+    cfg.selected_tls = selected_tls;
+    dbg!(&cfg);
+    cfg.save();
 }
 
-// input management
-pub fn get_number_input() -> Result<u16, std::num::ParseIntError> {
-    let mut input_text = String::new();
-    std::io::stdin()
-        .read_line(&mut input_text)
-        .expect("failed to read from stdin");
-    
-    let trimmed = input_text.trim();
-    trimmed.parse::<u16>()
-}

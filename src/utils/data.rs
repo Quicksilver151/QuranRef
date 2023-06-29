@@ -1,15 +1,6 @@
 
 use crate::*;
 
-// TODO: fix to proper api data formats
-// pub struct QuranTranslation {
-//     pub chapters: Vec<Chapter>
-// }
-// pub struct Chapter{
-    // pub verses: Vec<Verse>
-// }
-
-
 
 pub fn save_translation(content:&str, translation_name:&str){
     
@@ -43,7 +34,8 @@ pub fn load_downloaded_translation(translation: &Translation) -> Quran {
     quran
     
 }
-pub fn list_downloaded_translations() -> Vec<Translation> {
+
+pub fn get_downloaded_translations_list() -> Vec<Translation> {
     // Get the project directories
     let project_dirs = ProjectDirs::from("", "", "quran-ref").unwrap();
     
@@ -71,12 +63,35 @@ pub fn list_downloaded_translations() -> Vec<Translation> {
     tl
 }
 
-// TODO: 
-//  - Store translations
-//      - Optimised format if possible
-//  - Load translations
-//  - Parse translations to verse list
-//      - optimise wherever possible
+
+pub fn download_translation() {
+    println!("select a translation index to download");
+    println!("======================================");
+    
+    let tl: Vec<Translation> = get_translation_list();
+    
+    tl.iter().for_each(|tl|println!("{}\t{}",tl.id, tl.name));
+    
+    println!("input a number: ");
+    let number = get_number_input().unwrap();
+    let mut tl_name = "unkown".to_owned();
+    for i in tl {
+        if i.id == number {
+            tl_name = i.name;
+            break;
+        }
+    }
+
+    let selected_tl = Translation { id: number, name: tl_name };
+    let quran = download_quran(&selected_tl);
+    save_quran_data(quran);
+    
+    // TODO: move selection or download to a separate flag
+    // cfg.current_tl = selected_tl;
+    // dbg!(&cfg);
+    // cfg.save();
+}
+
 
 
 

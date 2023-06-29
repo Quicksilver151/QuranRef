@@ -65,3 +65,22 @@ pub fn handle_ctrlc() {
         }
     });
 }
+
+// input management
+pub fn get_number_input() -> Result<u16, std::num::ParseIntError> {
+    let mut input_text = String::new();
+    std::io::stdin()
+        .read_line(&mut input_text)
+        .expect("failed to read from stdin");
+    
+    input_text.trim().parse::<u16>()
+}
+pub fn get_number_list_input() -> Result<Vec<u16>, std::num::ParseIntError> {
+    let mut input_text = String::new();
+    std::io::stdin()
+        .read_line(&mut input_text)
+        .expect("failed to read from stdin");
+    
+    input_text.split(',').map(|x|x.trim().parse::<u16>()).collect()
+}
+

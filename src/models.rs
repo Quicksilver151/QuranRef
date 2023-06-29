@@ -72,12 +72,17 @@ pub fn parse_num(numstr: &str) -> Result<u16, VerseErr> {
 }
 
 // tl:
-
 #[derive(Debug, Default, Serialize, Deserialize, PartialEq, PartialOrd, Clone)]
 pub struct Translation {
     pub id: u16,
     pub name: String,
 }
+impl Translation {
+    pub fn is_id(&self, id: &u16) -> bool{
+        &self.id == id
+    }
+}
+
 
 // quran data
 #[derive(Debug, Default, Serialize, Deserialize)]

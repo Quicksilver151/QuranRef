@@ -118,6 +118,7 @@ struct ApiTranslations {
 }
 
 // functions
+#[tokio::main]
 pub async fn get_translation_list() -> Vec<Translation> {
     let data = match reqwest::get("https://api.quran.com/api/v4/resources/translations").await {
         Ok(data) => data,
