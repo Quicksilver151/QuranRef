@@ -90,30 +90,6 @@ pub fn show_verses(quran: &Quran, verse_range: &VerseRange) {
     
 }
 
-
-//
-// #[tokio::main]
-// pub async fn config_init(){
-//     let translations : Vec<Translation> = get_translation_list();
-//     let accepted = vec![20,131];
-//     let mut translation_ids: Vec<Translation> = translations.into_iter().filter(|x| accepted.contains(&x.id)).collect();// REWORK ALL Of DIS
-//     let cfg_result: Result<Config, confy::ConfyError> = confy::load("quran-ref", None);
-//     let mut cfg =
-//         match cfg_result {
-//             Ok (cfg_result) => cfg_result,
-//             Err(cfg_result) => {
-//                 println!("{}", cfg_result);
-//                 Config::default()
-//             }
-//         };
-//     cfg.translations.append(&mut translation_ids);
-//     
-//     dbg!(&cfg);
-//     match confy::store("quran-ref", None, cfg) {
-//         Ok(_)  => println!("Stored data successfully"),
-//         Err(problem) => println!("Storing data failed due to {}", problem),
-//     }
-// }
 #[tokio::main]
 pub async fn print_verse(verse_index: &VerseIndex){
 
