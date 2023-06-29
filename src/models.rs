@@ -94,7 +94,7 @@ impl Display for Verse {
         let index_len = index.chars().count();
         let equal_len = 64 - index_len;
         let eq_string = "=".repeat(equal_len);
-
+        
         let mut text = format!("|{}|{}\n", index, eq_string.red());
         
         text += &format!("{}\n",tl);

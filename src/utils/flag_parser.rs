@@ -9,10 +9,11 @@ pub enum FlagErr {
 
 #[derive(Default, Debug)]
 pub struct Flag {
-    pub help   : bool,
-    pub edit   : bool,
-    pub arabic : bool,
-    pub verses : VerseRange
+    pub help     : bool,
+    pub edit     : bool,
+    pub download : bool,
+    pub arabic   : bool,
+    pub verses   : VerseRange
 }
 
 pub const HELP_TEXT : &str =
@@ -26,10 +27,12 @@ USAGE:  quran-ref [OPTIONS] <START_CHAPTER:START_VERSE> <END_CHAPTER:END_VERSE>
 
 OPTIONS:
     -h, --help          shows this help section
-    -e, --edit          configure the program
-    -a, --arabic        includes the arabic part
+    -e, --edit          select the translations to display
+    -d, --download      download translations to use the program offline
+    -a, --arabic        includes the arabic part (WIP)
 EXAMPLES: 
 $ quran-ref 21:12
+    (prints verse 21:12)
 
 $ quran-ref 12:3 12:8 
     (prints verses in range [12:3, 12:4, 12:5, 12:6, 12:7, 12:8])
@@ -40,8 +43,10 @@ $ quran-ref -a 3:23-28
 $ quran-ref -a 3:10 3:14
     (prints verses in range [3:10, 3:11, 3:12, 3:13, 3:14] with arabic)
 
-   
-config is stored in ~/.config/quran-ref/";
+
+on linux:
+config is stored in ~/.config/quran-ref/
+data and translations are stored in ~/.local/share/quran-ref/";
 
 
 pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
@@ -64,6 +69,7 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
             match argument {
                 "help"      =>  flag.help   = true,
                 "edit"      =>  flag.edit   = true,
+                "download"  =>  flag.download = true,
                 "arabic"    =>  flag.arabic = true,
                 _ => {
                     println!("===INVALID FLAG ENTERED===\n");
@@ -79,6 +85,7 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
                 match argchar {
                     'h'     =>  flag.help   = true,
                     'e'     =>  flag.edit   = true,
+                    'd'     =>  flag.download = true,
                     'a'     =>  flag.arabic = true,
                     _ => {
                         println!("==INVALID FLAG ENTERED===\n");

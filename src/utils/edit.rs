@@ -23,9 +23,10 @@ pub fn edit(cfg: &mut Config) {
     let quran = download_quran(&selected_tl);
     save_quran_data(quran);
     
-    cfg.add_translation(selected_tl);
-    dbg!(&cfg);
-    cfg.save();
+    // TODO: move selection or download to a separate flag
+    // cfg.current_tl = selected_tl;
+    // dbg!(&cfg);
+    // cfg.save();
 }
 
 // input management
