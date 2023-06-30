@@ -40,13 +40,11 @@ pub fn clear_screen() {
     print!("\x1B[2J");
     print!("\x1b[1;1H");
 }
-#[allow(dead_code)]
 pub fn new_buffer() {
     print!("\x1b[?1049h");
 }
-#[allow(dead_code)]
 pub fn exit_buffer() {
-    print!("\x1b[?1049l");
+    println!("\x1b[?1049l");
 }
 
 

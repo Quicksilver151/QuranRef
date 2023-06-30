@@ -8,8 +8,11 @@ pub fn edit(cfg: &mut Config) {
     if tls.is_empty(){eprintln!("Err: {}","No downloaded translations found".red());return}
     
     // println!("Toggle selected downloaded translations by their index");
+    
+    new_buffer();
+    clear_screen();
     println!("========================================================");
-    println!("{:<5}|{:<10}|name","index","status",);
+    println!("{:<5}|{:<10    }|name", "index", "status",);
     println!("-----|----------|---------------------------------------");
     for tl in tls.iter(){
         let status = match cfg.selected_tls.contains(tl){
@@ -30,8 +33,9 @@ pub fn edit(cfg: &mut Config) {
             }
         }
     }
+    exit_buffer();
     if selected_tls.is_empty(){
-        eprintln!("No translations selected. No changes made");
+        println!("No translations selected. No changes made");
         return;
     }
     cfg.selected_tls = selected_tls;
