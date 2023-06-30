@@ -42,16 +42,15 @@ pub fn get_downloaded_translations_list() -> Vec<Translation> {
     // Get the path to the data directory
     let data_dir = project_dirs.data_dir();
     
-    let file_names: Vec<String> = data_dir
-        .read_dir()
-        .expect("Read the contents of the local folder")
-        .map(|x| x.unwrap().file_name().to_str().unwrap().to_string())
-        .collect();
+    let file_names: Vec<String> = match data_dir.read_dir() {
+        Ok(path) => path.into_iter().map(|x|x.unwrap().file_name().to_str().unwrap().to_string()).collect(),
+        Err(err) => {println!("Translation downlods folder missing\nErr: {}",err.to_string().red());vec![]}
+    };
     
     // parse name to translation struct
     let mut tl :Vec<Translation>= vec![];
     for file in file_names { 
-        let (strid, strname) = file.split_once(' ').unwrap();
+        let (strid, strname) = file.split_once(' ').unwrap_or_default();
         let id = match strid.parse::<u16>() {
             Ok(id) => id,
             Err(_) => continue,
