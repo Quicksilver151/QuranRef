@@ -50,7 +50,6 @@ pub fn exit_buffer() {
 
 use signal_hook::{consts::SIGINT, iterator::Signals};
 // handle SIGINT
-#[allow(dead_code)]
 pub fn handle_ctrlc() {
     let mut signals = Signals::new([SIGINT]).unwrap();
     

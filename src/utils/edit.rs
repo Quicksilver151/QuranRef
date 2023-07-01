@@ -10,6 +10,7 @@ pub fn edit(cfg: &mut Config) {
     // println!("Toggle selected downloaded translations by their index");
     
     new_buffer();
+    handle_ctrlc();
     clear_screen();
     println!("========================================================");
     println!("{:<5}|{:<10    }|name", "index", "status",);
