@@ -20,16 +20,17 @@ pub const HELP_TEXT : &str =
 "quran-ref
 Display the verses of the quran in various english translations using references
 
+
 USAGE:  quran-ref [OPTIONS] <START_CHAPTER:START_VERSE> <END_CHAPTER:END_VERSE>
             or
         quran-ref [OPTIONS] <START_CHAPTER:START_VERSE>-<END_VERSE>
-
 
 OPTIONS:
     -h, --help          shows this help section
     -e, --edit          select the translations to display
     -d, --download      download translations to use the program offline
     -a, --arabic        includes the arabic part (WIP)
+
 EXAMPLES: 
 $ quran-ref 21:12
     (prints verse 21:12)
@@ -47,7 +48,6 @@ $ quran-ref -a 3:10 3:14
 on linux:
 config is stored in ~/.config/quran-ref/
 data and translations are stored in ~/.local/share/quran-ref/";
-
 
 pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
     // let mut args : Vec<String> = env::args().collect();
