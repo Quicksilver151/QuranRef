@@ -64,13 +64,13 @@ fn main() {
     //  if .local has cfg selected translation:
     //      fetch local
     //  else:
-    //      fetch online (done!)
+    //      fetch online (done!) (remove feature)
     dbg!(&downloaded_tls, &cfg.current_tl);
-    if downloaded_tls.contains(&cfg.current_tl){
-        let quran = load_downloaded_translation(&cfg.current_tl);
+    for tl in cfg.selected_tls.iter() {
+        let quran = load_downloaded_translation(tl);
         show_verses(&quran, &flag.verses);
-        return
     }
+    return;
     for index in flag.verses.to_vec().iter() { 
         // TODO: FIX THE LINE SIZE DAMMIT
         println!("{:<5}|{}",format!("{}",index).bold(),"==========================================================".red());
