@@ -66,17 +66,19 @@ fn main() {
     //  else:
     //      fetch online (done!) (remove feature)
     dbg!(&downloaded_tls, &cfg.current_tl);
+    if cfg.selected_tls.is_empty() {
+        eprintln!("{}", "Download some translations with -d and select them with -e".red())
+    }
     for tl in cfg.selected_tls.iter() {
         let quran = load_downloaded_translation(tl);
         show_verses(&quran, &flag.verses);
     }
-    return;
-    for index in flag.verses.to_vec().iter() { 
-        // TODO: FIX THE LINE SIZE DAMMIT
-        println!("{:<5}|{}",format!("{}",index).bold(),"==========================================================".red());
-        print_verse(index);
-    }
-    println!("{}","================================================================".red());
+    // for index in flag.verses.to_vec().iter() { 
+    //     // TODO: FIX THE LINE SIZE DAMMIT
+    //     println!("{:<5}|{}",format!("{}",index).bold(),"==========================================================".red());
+    //     print_verse(index);
+    // }
+    // println!("{}","================================================================".red());
     
 }
 

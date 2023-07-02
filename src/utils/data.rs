@@ -27,7 +27,10 @@ pub fn load_downloaded_translation(translation: &Translation) -> Quran {
     let tl_name = format!("{} {}", translation.id, translation.name);
     tl_file_path.push(tl_name);
     
-    let quran_json = std::fs::read_to_string(tl_file_path).unwrap();
+    let quran_json = match std::fs::read_to_string(tl_file_path){
+        Ok(x) => x,
+        Err(_) => {eprintln!("{}","No translations downloaded\nRun program with -d flag to download translations".red()); panic!();},
+    };
     
     let quran: Quran = serde_json::from_str(&quran_json).unwrap();
     
