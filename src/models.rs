@@ -115,7 +115,7 @@ pub struct Quran {
     pub translation: Translation
 }
 impl Quran {
-    pub fn fetch_verses(&self, verse_range: &VerseRange) -> Vec<Verse>{
+    pub fn get_slice(&self, verse_range: &VerseRange) -> Vec<Verse>{
         let chapter = verse_range.index.chapter as usize;
         let start_verse = verse_range.index.verse as usize;
         let end_verse = {
