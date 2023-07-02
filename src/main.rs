@@ -89,11 +89,23 @@ pub fn show_verses(quran: Vec<Quran>, verse_range: &VerseRange) {
     let tls:Vec<Vec<Verse>> = quran.iter().map(|q| q.get_slice(verse_range)).collect();
     let verse_num = tls[0].len();
     for verse in 0..verse_num {
+        let index = format!("|{}|",tls[0][verse].index).bold().on_black();
+        let index_len = index.chars().count();
+        let equal_len = 64 - index_len;
+        let eq_string = "=".repeat(equal_len);
+        
+        let text = format!("{}{}", index, eq_string.red());
+        println!("{text}");
         for tl in tls.iter(){
             let out = &tl[verse];
             println!("{}",out);
+            
+            if tl != tls.last().unwrap(){
+                println!("{}","-".repeat(64).black());
+            }
         }
     }
+    println!("{}","=".repeat(64).red());
 }
 
 

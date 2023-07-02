@@ -6,7 +6,7 @@ use crate::*;
 #[derive(Debug)]
 pub enum VerseErr{Invalid}
 
-#[derive(Default, Debug, Serialize, Deserialize)]
+#[derive(Default, Debug, Serialize, Deserialize, PartialEq, PartialOrd)]
 pub struct VerseIndex {
     pub chapter : u16,
     pub verse   : u16,
@@ -85,7 +85,7 @@ impl Translation {
 
 
 // quran data
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize, PartialEq, PartialOrd)]
 pub struct Verse {
     pub text: String,
     pub index: VerseIndex,
@@ -94,14 +94,14 @@ pub struct Verse {
 impl Display for Verse {
     fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         let verse = textwrap::fill(&self.text, 64);
-        let index = format!("|{}|",&self.index).bold().on_black();
         let tl = &self.tl.name;
-        let index_len = index.chars().count();
-        let equal_len = 64 - index_len;
-        let eq_string = "=".repeat(equal_len);
+        // let index = format!("|{}|",&self.index).bold().on_black();
+        // let index_len = index.chars().count();
+        // let equal_len = 64 - index_len;
+        // let eq_string = "=".repeat(equal_len);
         
-        let mut text = format!("{}{}\n", index, eq_string.red());
-        
+        // let mut text = format!("{}{}\n", index, eq_string.red());
+        let mut text = "".to_owned();
         text += &format!("{}\n",tl);
         text += &format!("{}",verse.blue());
         // text += &format!("{}","\n==================================================================".red());
