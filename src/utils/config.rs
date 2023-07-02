@@ -13,7 +13,6 @@ impl Config {
             Ok (cfg) => cfg,
             Err(reason) => {
                 println!("Failed to load config due to: {}\nCreating new config with defaults", reason);
-                // confy::store("quran-ref", "conf", cfg)
                 Config::default()
             }
         }
@@ -30,10 +29,10 @@ impl Config {
 
 
 //  TODO:
-//  list translations()
-//      select translations()
+//  list translations()x
+//      select translations()x
 //          sort translations() / filter translations()
-//      save translation ids(config.rs)/download complete translations(download.rs)
+//      save translation ids(config.rs)x / download complete translations(download.rs)x
 //
 
 

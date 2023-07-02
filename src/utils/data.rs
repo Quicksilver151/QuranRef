@@ -83,15 +83,10 @@ pub fn download_translation() {
             break;
         }
     }
-
+    
     let selected_tl = Translation { id: number, name: tl_name };
     let quran = download_quran(&selected_tl);
     save_quran_data(quran);
-    
-    // TODO: move selection or download to a separate flag
-    // cfg.current_tl = selected_tl;
-    // dbg!(&cfg);
-    // cfg.save();
 }
 
 

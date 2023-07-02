@@ -60,32 +60,18 @@ fn main() {
     }else{
         todo!("handle verses in reverse order");
     }
-    //Main code:
-    //  if .local has cfg selected translation:
-    //      fetch local
-    //  else:
-    //      fetch online (done!) (remove feature)
+    
     dbg!(&downloaded_tls, &cfg.current_tl);
     if cfg.selected_tls.is_empty() {
         eprintln!("{}", "Download some translations with -d and select them with -e".red())
     }
     let quran_tls :Vec<Quran> = cfg.selected_tls.iter().map(load_downloaded_translation).collect();
     show_verses(quran_tls, &flag.verses);
-    // for tl in cfg.selected_tls.iter() {
-    //     let quran = load_downloaded_translation(tl);
-    //     show_verses(&quran, &flag.verses);
-    // }
-    // for index in flag.verses.to_vec().iter() { 
-    //     // TODO: FIX THE LINE SIZE DAMMIT
-    //     println!("{:<5}|{}",format!("{}",index).bold(),"==========================================================".red());
-    //     print_verse(index);
-    // }
-    // println!("{}","================================================================".red());
-    
 }
 
 pub fn show_verses(quran: Vec<Quran>, verse_range: &VerseRange) {
     
+    // do not touch dis mess!!!!!!!!!!!1
     let tls:Vec<Vec<Verse>> = quran.iter().map(|q| q.get_slice(verse_range)).collect();
     let verse_num = tls[0].len();
     for verse in 0..verse_num {
