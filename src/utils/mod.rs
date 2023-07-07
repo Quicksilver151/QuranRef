@@ -81,3 +81,50 @@ pub fn get_number_list_input() -> Result<Vec<u16>, std::num::ParseIntError> {
     input_text.split(',').map(|x|x.trim().parse::<u16>()).collect()
 }
 
+pub fn remove_html_tags(input: &str) -> String {
+    let mut result = String::new();
+    let mut stack = Vec::new();
+    let mut in_tag = false;
+    
+    for c in input.chars() {
+        if c == '<' {
+            in_tag = true;
+            stack.push(c);
+        } else if c == '>' {
+            in_tag = false;
+            stack.pop();
+        } else if !in_tag {
+            result.push(c);
+        }
+    }
+    
+    result
+}
+
+
+// pub fn clean_html_tags(input: &str) -> String {
+//     let mut result = String::new();
+//     let mut stack = Vec::new();
+//     let mut fully_out = true;
+//     let mut partially_out = false;
+//     
+//     for c in input.chars() {
+//         if c == '<' {
+//             fully_out = false;
+//             stack.push(c);
+//         } else if c == '/'{
+//             partially_out = true;
+//             result.push(' ');
+//         } else if c == '>' && partially_out {
+//             fully_out = true;
+//             stack.pop();
+//         } else if fully_out{
+//             dbg!(&fully_out);
+//             result.push(c);
+//         }
+//     }
+//     result
+// }
+
+
+

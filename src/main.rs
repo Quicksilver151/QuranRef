@@ -31,7 +31,7 @@ fn main() {
         Err(_flag) => {println!("flag_err:{_flag:?}\n{}",HELP_TEXT); return;},
     };
     
-    dbg!(&flag);
+    // dbg!(&flag);
     
     
     // branch flags
@@ -61,13 +61,16 @@ fn main() {
         todo!("handle verses in reverse order");
     }
     
-    dbg!(&downloaded_tls, &cfg.current_tl);
+    // dbg!(&downloaded_tls, &cfg.current_tl);
     if cfg.selected_tls.is_empty() {
         eprintln!("{}", "Download some translations with -d and select them with -e".red())
     }
     let quran_tls :Vec<Quran> = cfg.selected_tls.iter().map(load_downloaded_translation).collect();
+    
     show_verses(quran_tls, &flag.verses);
+    
 }
+
 
 pub fn show_verses(quran: Vec<Quran>, verse_range: &VerseRange) {
     
@@ -112,5 +115,8 @@ pub async fn download_quran(translation: &Translation)-> Quran {
     
     
 }
+
+
+
 
 

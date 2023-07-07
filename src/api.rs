@@ -47,7 +47,7 @@ impl std::fmt::Display for VerseData {
     fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         
         let text = self.verse.translations[0].text.to_string();
-        let text = remove_sup_tag(text);
+        let text = remove_html_tags(&remove_sup_tag(text));
         let wraped_text = textwrap::fill(&text, 64);
         write!(w, "{}", wraped_text.blue())
     }
@@ -190,8 +190,7 @@ pub async fn fetch_chapter(translation: &Translation, chapter_number: u16) -> Ve
     let mut verses: Vec<String> = vec![chapter_number.to_string()];
     verses.append(&mut chapter.into_iter().map(|x| x.text).collect());
     
-    verses.into_iter().map(remove_sup_tag).collect()
-    
+    verses.into_iter().map(|x| remove_html_tags(&remove_sup_tag(x))).collect()
 }
 
 pub async fn fetch_quran(translation: &Translation) -> Quran {
