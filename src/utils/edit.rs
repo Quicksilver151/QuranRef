@@ -6,9 +6,7 @@ pub fn edit(cfg: &mut Config) {
         eprintln!("Err: {}", "No downloaded translations found".red());
         return;
     }
-
-    // println!("Toggle selected downloaded translations by their index");
-
+    
     new_buffer();
     handle_ctrlc();
     clear_screen();
@@ -26,7 +24,7 @@ pub fn edit(cfg: &mut Config) {
     println!("\nInput comma separated numbers: [eg: 20,131,270]");
     let numbers = get_number_list_input().unwrap_or_default();
     let mut selected_tls: Vec<Translation> = vec![];
-
+    
     for number in numbers {
         for tl in tls.iter() {
             if tl.is_id(&number) {

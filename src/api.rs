@@ -24,16 +24,12 @@ fn remove_section(s: &str, start: usize, end: usize) -> String {
     result.push_str(&s[end..]);
     result
 }
-fn remove_sup_tag(text: String) -> String {
+pub fn remove_sup_tag(text: String) -> String {
     let mut text = text;
     let mut failsafe = 50;
-    loop {
-        match text.find("<sup") {
-            Some(found) => {
-                text = remove_section(&text, found, text.find("</sup>").unwrap_or(found) + 6)
-            }
-            None => break,
-        };
+    
+    while let Some(found) = text.find("<sup"){
+        text = remove_section(&text, found, text.find("</sup>").unwrap_or(found) + 6);
         failsafe -= 1;
         if failsafe < 0 {
             break;
@@ -70,29 +66,10 @@ struct Verse {
     pub translations: Vec<TranslationText>,
 }
 
-// functions
-pub async fn get_verse_data(verse_index: &VerseIndex, translation: u16) -> VerseData {
-    let body = reqwest::get(format!(
-        "https://api.quran.com/api/v4/verses/by_key/{}?language=en&translations={}",
-        verse_index, translation
-    ))
-    .await
-    .unwrap()
-    .text()
-    .await
-    .unwrap();
 
-    match serde_json::from_str(&body) {
-        Ok(verse_data) => verse_data,
-        Err(problem) => {
-            println!("Failed due to: {}\nselecting default values", problem);
-            VerseData::default()
-        }
-    }
-}
 
 // ====================
-// List ApiTranslations
+// ApiTranslation Names
 // ====================
 
 // structs
@@ -128,23 +105,22 @@ struct ApiTranslations {
     pub translations: Vec<TranslationData>,
 }
 
-// functions
 #[tokio::main]
 pub async fn get_translation_list() -> Vec<Translation> {
     let data = match reqwest::get("https://api.quran.com/api/v4/resources/translations").await {
         Ok(data) => data,
         Err(_) => panic!("no network connection"),
     };
-
+    
     let body = match data.text().await {
         Ok(body) => body,
         Err(problem) => panic!("failed to extract text: {}", problem),
     };
-
+    
     let api_translations = serde_json::from_str::<ApiTranslations>(&body)
         .unwrap()
         .translations;
-
+    
     api_translations
         .into_iter()
         .map(|x| Translation {
@@ -165,25 +141,22 @@ pub async fn fetch_chapter(translation: &Translation, chapter_number: u16) -> Ve
         resource_id: u16,
         chapter_number: String,
     }
-
     #[derive(Default, Debug, Serialize, Deserialize)]
     struct ChapterMeta {
         translation_name: String,
         author_name: String,
     }
-
     #[derive(Default, Debug, Serialize, Deserialize)]
     struct Translation {
         resource_id: u16,
         text: String,
     }
-
     #[derive(Default, Debug, Serialize, Deserialize)]
     struct ApiChapter {
         translations: Vec<Translation>,
         meta: ChapterMeta,
     }
-
+    
     let url = format!(
         "https://api.quran.com/api/v4/quran/translations/{}?chapter_number={}",
         translation.id, chapter_number
@@ -192,19 +165,19 @@ pub async fn fetch_chapter(translation: &Translation, chapter_number: u16) -> Ve
         Ok(data) => data,
         Err(_) => panic!("no network connection"),
     };
-
+    
     let body = match data.text().await {
         Ok(body) => body,
         Err(problem) => panic!("failed to extract text: {}", problem),
     };
-
+    
     let chapter = serde_json::from_str::<ApiChapter>(&body)
         .unwrap()
         .translations;
-
+    
     let mut verses: Vec<String> = vec![chapter_number.to_string()];
     verses.append(&mut chapter.into_iter().map(|x| x.text).collect());
-
+    
     verses
         .into_iter()
         .map(|x| remove_html_tags(&remove_sup_tag(x)))
@@ -213,15 +186,15 @@ pub async fn fetch_chapter(translation: &Translation, chapter_number: u16) -> Ve
 
 pub async fn fetch_quran(translation: &Translation) -> Quran {
     let mut quran = Quran::default();
-
+    
     quran.chapters.append(&mut vec![vec!["-".to_owned()]]);
-
+    
     for i in 1..115 {
         println!("{} {}", "downloading chapter:".yellow(), i);
         let chapter = fetch_chapter(translation, i).await;
         quran.chapters.append(&mut vec![chapter])
     }
-
+    
     quran.translation = Translation {
         id: translation.id,
         name: translation.name.to_owned(),
@@ -233,4 +206,29 @@ pub async fn fetch_quran(translation: &Translation) -> Quran {
 pub async fn download_quran(translation: &Translation) -> Quran {
     fetch_quran(translation).await
 }
+
+
+
+// DEPRECIATED ONLINE FETCH CODE
+// async fn get_verse_data(verse_index: &VerseIndex, translation: u16) -> VerseData {
+//     let body = reqwest::get(format!(
+//         "https://api.quran.com/api/v4/verses/by_key/{}?language=en&translations={}",
+//         verse_index, translation
+//     ))
+//     .await
+//     .unwrap()
+//     .text()
+//     .await
+//     .unwrap();
+//     
+//     match serde_json::from_str(&body) {
+//         Ok(verse_data) => verse_data,
+//         Err(problem) => {
+//             println!("Failed due to: {}\nselecting default values", problem);
+//             VerseData::default()
+//         }
+//     }
+// }
+
+
 

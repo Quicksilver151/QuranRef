@@ -16,13 +16,13 @@ use api::*;
 use models::*;
 use utils::*;
 
+
 #[allow(unused)]
 fn main() {
-    // init
     // load config & data
     let downloaded_tls = get_downloaded_translations_list();
     let mut cfg = Config::load();
-
+    
     // fetch flags
     let args: Vec<String> = env::args().collect();
     let flag: Flag = match flag_parser::parse_args(args) {
@@ -32,9 +32,7 @@ fn main() {
             return;
         }
     };
-
-    // dbg!(&flag);
-
+    
     // branch flags
     if flag.help {
         println!("{}", HELP_TEXT);
@@ -61,8 +59,7 @@ fn main() {
     } else {
         todo!("handle verses in reverse order");
     }
-
-    // dbg!(&downloaded_tls, &cfg.current_tl);
+    
     if cfg.selected_tls.is_empty() {
         eprintln!(
             "{}",
@@ -74,7 +71,7 @@ fn main() {
         .iter()
         .map(load_downloaded_translation)
         .collect();
-
+    
     show_verses(quran_tls, &flag.verses);
 }
 
@@ -88,13 +85,13 @@ pub fn show_verses(quran: Vec<Quran>, verse_range: &VerseRange) {
         let index_len = index.chars().count();
         let equal_len = 64 - index_len;
         let eq_string = "=".repeat(equal_len);
-
+        
         let text = format!("{}{}", index, eq_string.red());
         println!("{text}");
         for tl in tls.iter() {
             let out = &tl[verse];
             println!("{}", out);
-
+            
             if tl != tls.last().unwrap() {
                 println!("{}", "-".repeat(64).black());
             }
@@ -102,18 +99,4 @@ pub fn show_verses(quran: Vec<Quran>, verse_range: &VerseRange) {
     }
     println!("{}", "=".repeat(64).red());
 }
-
-// #[tokio::main]
-// pub async fn print_verse(verse_index: &VerseIndex) {
-//     let sahih: VerseData = get_verse_data(verse_index, 20).await;
-//     let clear: VerseData = get_verse_data(verse_index, 131).await;
-//
-//     println!(
-//         "Sahih International:\n{}\n{}\nDr.Mustafa Khattab, the Clear Quran:\n{}",
-//         sahih,
-//         "----------------------------------------------------------------".bright_black(),
-//         clear
-//     );
-// }
-//
 

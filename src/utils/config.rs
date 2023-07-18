@@ -19,7 +19,7 @@ impl Config {
             }
         }
     }
-
+    
     pub fn save(&self) {
         match confy::store("quran-ref", "config", self) {
             Ok(_) => println!("Saved config successfully!"),

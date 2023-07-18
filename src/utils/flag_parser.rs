@@ -53,10 +53,10 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
     args.reverse();
     args.pop();
     args.reverse();
-
+    
     // println!("{:?}",args);
     let mut flag: Flag = Flag::default();
-
+    
     for arg in args {
         let arg_vec: Vec<char> = arg.chars().collect::<Vec<char>>();
         if arg_vec.len() == 1 {
@@ -65,14 +65,11 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
         } else if arg_vec[0] == '-' && arg_vec[1] == '-' {
             let argument = arg.strip_prefix("--").unwrap();
             match argument {
-                "help" => flag.help = true,
-                "edit" => flag.edit = true,
-                "download" => flag.download = true,
-                "arabic" => flag.arabic = true,
-                _ => {
-                    println!("===INVALID FLAG ENTERED===\n");
-                    return Err(FlagErr::Invalid);
-                }
+                "help"      => flag.help     = true,
+                "edit"      => flag.edit     = true,
+                "download"  => flag.download = true,
+                "arabic"    => flag.arabic   = true,
+                _           => {println!("===INVALID FLAG ENTERED===\n"); return Err(FlagErr::Invalid);}
             }
         } else if arg_vec[0] == '-' {
             for argchar in arg_vec {
@@ -80,10 +77,10 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
                     continue;
                 }
                 match argchar {
-                    'h' => flag.help = true,
-                    'e' => flag.edit = true,
-                    'd' => flag.download = true,
-                    'a' => flag.arabic = true,
+                    'h'     => flag.help     = true,
+                    'e'     => flag.edit     = true,
+                    'd'     => flag.download = true,
+                    'a'     => flag.arabic   = true,
                     _ => {
                         println!("==INVALID FLAG ENTERED===\n");
                         return Err(FlagErr::Invalid);
@@ -93,18 +90,21 @@ pub fn parse_args(mut args: Vec<String>) -> Result<Flag, FlagErr> {
         } else if !arg.contains(':') {
             println!("Invalid verse format. ':' required");
             return Err(FlagErr::Broken);
+        
+        // index-endex range
         } else if arg.contains('-') {
-            // index-endex range
             flag.verses = VerseRange::from(&arg).unwrap();
+        
+        // index
         } else if flag.verses.index.chapter == 0 {
-            // index
             flag.verses.index = VerseIndex::from(&arg);
             flag.verses.endex = VerseIndex::from(&arg);
+        
+        // endex
         } else {
-            // endex
             flag.verses.endex = VerseIndex::from(&arg);
         }
     }
-
+    
     Ok(flag)
 }
