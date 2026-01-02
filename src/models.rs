@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use std::{error, fmt::Display};
 
 use crate::*;
 
@@ -7,20 +7,29 @@ pub enum VerseErr {
     Invalid,
 }
 
-#[derive(Default, Debug, Serialize, Deserialize, PartialEq, PartialOrd)]
+impl Display for VerseErr {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Invalid format for verse index")
+    }
+}
+
+#[derive(Default, Debug, Serialize, Deserialize, PartialEq, PartialOrd, Clone, Copy)]
 pub struct VerseIndex {
     pub chapter: u16,
     pub verse: u16,
 }
 impl VerseIndex {
-    pub fn from(index: &str) -> VerseIndex {
+    pub fn from(index: &str) -> Result<VerseIndex, VerseErr> {
         let splits: Vec<&str> = index.split(':').collect();
+        if splits.len() != 2 {
+            return Err(VerseErr::Invalid);
+        }
         let (chapter_index, verse_index) = (splits[0], splits[1]);
 
-        VerseIndex {
-            chapter: parse_num(chapter_index).unwrap(),
-            verse: parse_num(verse_index).unwrap(),
-        }
+        Ok(VerseIndex {
+            chapter: parse_num(chapter_index)?,
+            verse: parse_num(verse_index)?,
+        })
     }
 }
 
@@ -42,8 +51,8 @@ impl VerseRange {
         let (index, endex) = (splits[0], &format!("{}:{}", chapter[0], splits[1]));
 
         Ok(VerseRange {
-            index: VerseIndex::from(index),
-            endex: VerseIndex::from(endex),
+            index: VerseIndex::from(index)?,
+            endex: VerseIndex::from(endex)?,
         })
     }
 

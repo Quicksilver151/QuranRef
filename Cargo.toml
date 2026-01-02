@@ -16,6 +16,8 @@ categories = ["command-line-utilities"]
 strip = true
 
 [dependencies]
+anyhow = "1.0.100"
+clap = { version = "4.5.53", features = ["derive"] }
 colored = "2.0.0"
 confy = "0.5.1"
 directories = "5.0.1"

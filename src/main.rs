@@ -1,6 +1,7 @@
 // std
 use std::env;
 
+use clap::Parser;
 // crates
 pub use colored::*;
 pub use directories::*;
@@ -19,60 +20,71 @@ use utils::*;
 
 #[allow(unused)]
 fn main() {
-    // load config & data
-    let downloaded_tls = get_downloaded_translations_list();
+
+    let arg = cli::Cli::parse();
+
+
+
+    // let cli = cli::Cli::parse();
+    //
+    // let verses = cli.verse_range()?;
+    //
+    //
+    // // load config & data
+    // let downloaded_tls = get_downloaded_translations_list();
     let mut cfg = Config::load();
-    
-    // fetch flags
-    let args: Vec<String> = env::args().collect();
-    let flag: Flag = match flag_parser::parse_args(args) {
-        Ok(flag) => flag,
-        Err(_flag) => {
-            println!("flag_err:{_flag:?}\n{}", HELP_TEXT);
-            return;
-        }
-    };
-    
-    // branch flags
-    if flag.help {
-        println!("{}", HELP_TEXT);
-        return;
-    }
-    if flag.edit {
+    //
+    //
+    // // fetch flags
+    // let args: Vec<String> = env::args().collect();
+    // let flag: Flag = cli::parse_args(args).unwrap();
+
+    if arg.edit {
         edit(&mut cfg);
         return;
     }
-    if flag.download {
+    if arg.download {
         download_translation();
         println!("Download complete");
         return;
     }
-    if flag.arabic {
-        todo!("display verses in arabic");
-    }
-    if flag.verses.index.chapter == 0 {
-        println!("{}", HELP_TEXT);
-        return;
-    }
-    if flag.verses.is_in_order() {
-        println!("fetching verses:");
-    } else {
-        todo!("handle verses in reverse order");
-    }
+    // if flag.arabic {
+    //     todo!("display verses in arabic");
+    // }
+    // if flag.verses.index.chapter == 0 {
+    //     println!("{}", HELP_TEXT);
+    //     return;
+    // }
+    // if flag.verses.is_in_order() {
+    //     println!("fetching verses:");
+    // } else {
+    //     todo!("handle verses in reverse order");
+    // }
     
+    /// Config empty
     if cfg.selected_tls.is_empty() {
         eprintln!(
             "{}",
             "Download some translations with -d and select them with -e".red()
         )
     }
+
+    let verses = match arg.verse_range(){
+        Ok(verse) => verse,
+        Err(err) => {
+            println!("{}", err);
+            return;
+        }
+    };
     let quran_tls: Vec<Quran> = cfg
         .selected_tls
         .iter()
         .map(load_downloaded_translation)
         .collect();
-    
-    show_verses(quran_tls, &flag.verses);
+
+    show_verses(quran_tls, &verses);
+
+    // Ok(())
 }
 
 pub fn show_verses(quran: Vec<Quran>, verse_range: &VerseRange) {

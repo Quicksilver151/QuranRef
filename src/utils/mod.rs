@@ -2,12 +2,12 @@
 pub mod config;
 pub mod data;
 pub mod edit;
-pub mod flag_parser;
+pub mod cli;
 
 pub use config::*;
 pub use data::*;
 pub use edit::*;
-pub use flag_parser::*;
+pub use cli::*;
 
 pub use crate::*;
 
