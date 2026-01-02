@@ -1,7 +1,7 @@
 [package]
 name = "quran-ref"
 version = "0.2.1"
-edition = "2021"
+edition = "2024"
 authors = ["DefaultCube <quicksilverhq151@gmail.com>"]
 license = "MIT"
 description = "Display the verses of the quran in various english translations using references"
