@@ -82,13 +82,39 @@ fn main() {
         .map(load_downloaded_translation)
         .collect();
 
-    show_verses(quran_tls, &verses);
+    if arg.raw {
+        show_verses_raw(quran_tls, &verses);
+    } else {
+        show_verses(quran_tls, &verses);
+    }
 
     // Ok(())
 }
 
+pub fn show_verses_raw(quran: Vec<Quran>, verse_range: &VerseRange) {
+
+    let tls: Vec<Vec<Verse>> = quran.iter().map(|q| q.get_slice(verse_range)).collect();
+    let verse_num = tls[0].len();
+    for tl in tls.iter() {
+        println!("\n{}", tl[0].tl.to_string().red());
+        for verse in 0..verse_num {
+            let index = format!("{}", tls[0][verse].index.to_string().bold().green());
+            print!("{index} ");
+            let out: &Verse = &tl[verse];
+            println!("{}", out);
+
+
+            // if tl != tls.last().unwrap() {
+            //     println!("{}", "-".repeat(64).black());
+            // }
+        }
+    }
+    // println!("{}", "=".repeat(64).red());
+
+}
+
 pub fn show_verses(quran: Vec<Quran>, verse_range: &VerseRange) {
-    
+
     // do not touch dis mess!!!!!!!!!!!1
     let tls: Vec<Vec<Verse>> = quran.iter().map(|q| q.get_slice(verse_range)).collect();
     let verse_num = tls[0].len();
@@ -101,8 +127,9 @@ pub fn show_verses(quran: Vec<Quran>, verse_range: &VerseRange) {
         let text = format!("{}{}", index, eq_string.red());
         println!("{text}");
         for tl in tls.iter() {
+            println!("{}", tl[0].tl);
             let out = &tl[verse];
-            println!("{}", out);
+            println!("{}", out.to_string().blue());
             
             if tl != tls.last().unwrap() {
                 println!("{}", "-".repeat(64).black());

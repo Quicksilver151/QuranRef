@@ -89,6 +89,11 @@ impl Translation {
         &self.id == id
     }
 }
+impl Display for Translation {
+    fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(w, "{}", self.name)
+    }
+}
 
 // quran data
 #[derive(Debug, Default, Serialize, Deserialize, PartialEq, PartialOrd)]
@@ -99,10 +104,11 @@ pub struct Verse {
 }
 impl Display for Verse {
     fn fmt(&self, w: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-        let verse = textwrap::fill(&self.text, 64);
+        // let verse = textwrap::fill(&self.text, 64);
+        let verse = &self.text;
         let tl = &self.tl.name;
 
-        let formatted_text = format!("{tl}\n{}", verse.blue());
+        let formatted_text = format!("{verse}");
         write!(w, "{formatted_text}")
     }
 }

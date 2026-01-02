@@ -7,12 +7,11 @@ use clap::{Parser};
 #[command(
     name = "quran-ref",
     about = "Display the verses of the Quran in various English translations using references",
+    override_usage = r#"
+  quran-ref [OPTIONS] <START_CHAPTER>:<START_VERSE> <END_CHAPTER>:<END_VERSE>
+  quran-ref [OPTIONS] <START_CHAPTER>:<START_VERSE>-<END_VERSE>"#,
     after_help = r#"
 Display the verses of the Quran in various English translations using references.
-
-USAGE:
-  quran-ref [OPTIONS] <START_CHAPTER:START_VERSE> <END_CHAPTER:END_VERSE>
-  quran-ref [OPTIONS] <START_CHAPTER:START_VERSE>-<END_VERSE>
 
 EXAMPLES:
   quran-ref 21:12
@@ -49,7 +48,7 @@ pub struct Cli {
     #[arg(short, long)]
     pub raw: bool,
 
-    /// Verse reference(s)
+    /// Verse reference (eg: 2:1, 3:12-15)
     ///
     /// Examples:
     ///   21:12
